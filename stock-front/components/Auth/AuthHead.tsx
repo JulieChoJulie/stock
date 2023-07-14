@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
+import { logo } from "@/lib";
 
 type AuthHeadType = {
   heading: string;
@@ -17,16 +19,14 @@ const AuthHead = ({
   return (
     <div className="mb-1">
       <div className="flex justify-center">
-        <img
-          alt=""
-          className="h-14 w-14"
-          src="https://ik.imagekit.io/pibjyepn7p9/Lilac_Navy_Simple_Line_Business_Logo_CGktk8RHK.png?ik-sdk-version=javascript-1.4.3&updatedAt=1649962071315"
-        />
+        <div className="w-40 h-5" style={{ position: "relative" }}>
+          <Image src={logo} alt="logo" layout="fill" objectFit="contain" />
+        </div>
       </div>
-      <h2 className="mt-6 text-center text-xl font-extrabold text-gray-900">
+      <h2 className="mt-4 text-center text-xl font-extrabold text-gray-900">
         {heading}
       </h2>
-      <p className="mt-2 text-center text-sm text-gray-600 mt-5">
+      <p className="mt-2 text-center text-sm text-gray-600">
         {paragraph}{" "}
         <Link
           href={linkUrl}

@@ -16,9 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const passwordValidation = new RegExp(
-  "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})",
-);
+const passwordValidation =
+  /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
 const FormSchema = z
   .object({
@@ -54,6 +53,7 @@ const SignupForm = () => {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     // Sign up
+    console.log(data);
   }
   return (
     <Form {...form}>
@@ -137,7 +137,7 @@ const SignupForm = () => {
           )}
         />
         <div className="text-center w-full">
-          <Button className="mt-2 h-8 w-full mx-4" type="submit">
+          <Button className="mt-2 h-8 w-full group-default:" type="submit">
             Sign up
           </Button>
         </div>{" "}

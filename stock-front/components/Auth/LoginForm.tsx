@@ -17,9 +17,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const passwordValidation = new RegExp(
-  "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})",
-);
+// const passwordValidation = new RegExp(
+//   "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})",
+// );
+const passwordValidation =
+  /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
 const FormSchema = z.object({
   email: z
