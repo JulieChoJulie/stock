@@ -1,7 +1,5 @@
 const AuthCard = () => {
-  return (
-    <div>AuthCard</div>
-  )
-}
+  return <div>AuthCard</div>;
+};
 
-export default AuthCard
+export default AuthCard;

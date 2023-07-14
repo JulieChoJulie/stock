@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 function Card({ user }: { user: string | null | undefined }) {
   return (
@@ -8,4 +8,4 @@ function Card({ user }: { user: string | null | undefined }) {
   );
 }
 
-export default Card
+export default Card;
