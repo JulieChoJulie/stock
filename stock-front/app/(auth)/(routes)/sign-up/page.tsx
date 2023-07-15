@@ -5,13 +5,5 @@ import SignupCard from "@/components/Auth/SignupCard";
 
 export default async function Home() {
   const session = await getServerSession(options);
-  console.log(session);
-  //   return (
-  //     <>
-  //       {
-  //         session ? <Card user={session.user?.name} />:<SignupForm/>
-  //       }
-  //     </>
-  //   );
-  return <SignupCard />;
+  return <>{session ? <div>{session.user?.name}</div> : <SignupCard />}</>;
 }

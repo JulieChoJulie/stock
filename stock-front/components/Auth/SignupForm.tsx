@@ -63,14 +63,9 @@ const SignupForm = () => {
           name="username"
           render={({ field }) => (
             <FormItem className="mx-4">
-              <FormLabel className="text-xs">Username</FormLabel>
               <FormControl>
                 <div className="text-center">
-                  <Input
-                    className="w-full"
-                    placeholder="Enter Username"
-                    {...field}
-                  />
+                  <Input className="w-full" placeholder="Username" {...field} />
                 </div>
               </FormControl>
               <FormMessage />
@@ -82,14 +77,9 @@ const SignupForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem className="mx-4">
-              <FormLabel className="text-xs">Email</FormLabel>
               <FormControl>
                 <div className="text-center">
-                  <Input
-                    className="w-full"
-                    placeholder="Enter Email"
-                    {...field}
-                  />
+                  <Input className="w-full" placeholder="Email" {...field} />
                 </div>
               </FormControl>
               <FormMessage />
@@ -101,13 +91,12 @@ const SignupForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem className="mx-4">
-              <FormLabel className="text-xs">Password</FormLabel>
               <FormControl>
                 <div className="text-center">
                   <Input
                     className="w-full"
                     type="password"
-                    placeholder="Enter Password"
+                    placeholder="Password"
                     {...field}
                   />
                 </div>
@@ -121,13 +110,12 @@ const SignupForm = () => {
           name="confirm"
           render={({ field }) => (
             <FormItem className="mx-4">
-              <FormLabel className="text-xs">Confirm</FormLabel>
               <FormControl>
                 <div className="text-center">
                   <Input
                     className="w-full"
                     type="password"
-                    placeholder="Repeat Password"
+                    placeholder="Confirm Password"
                     {...field}
                   />
                 </div>

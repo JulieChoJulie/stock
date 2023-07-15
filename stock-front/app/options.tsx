@@ -10,9 +10,9 @@ export const options: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
     GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-      }),
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -20,24 +20,29 @@ export const options: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = { id: "1", email: "julie", password: "julie123" };
+        const user = {
+          id: "1",
+          email: "julie@gmail.com",
+          password: "julie11!",
+        };
 
-        if (credentials?.email == user.email && credentials.password == user.password) {
+        if (
+          credentials?.email == user.email &&
+          credentials.password == user.password
+        ) {
           return user;
-        } else {
-          return null;
-
         }
+        return null;
       },
     }),
-    ],
-    pages: {
-      signIn:"/"  
-    },
+  ],
+  pages: {
+    signIn: "/",
+  },
   session: {
     strategy: "jwt",
   },
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
-  }
+  },
 };

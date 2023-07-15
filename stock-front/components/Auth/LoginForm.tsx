@@ -53,20 +53,19 @@ const LoginForm = () => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full space-y-5 p-6"
+      >
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="mx-4">
-              <FormLabel className="text-xs">Email</FormLabel>
+            <FormItem>
+              {/* <FormLabel className="text-xs">Email</FormLabel> */}
               <FormControl>
                 <div className="text-center">
-                  <Input
-                    className="w-full"
-                    placeholder="Enter Email"
-                    {...field}
-                  />
+                  <Input className="w-full" placeholder="Email" {...field} />
                 </div>
               </FormControl>
               <FormMessage />
@@ -77,14 +76,14 @@ const LoginForm = () => {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="mx-4">
-              <FormLabel className="text-xs">Password</FormLabel>
+            <FormItem>
+              {/* <FormLabel className="text-xs">Password</FormLabel> */}
               <FormControl>
                 <div className="text-center">
                   <Input
                     className="w-full"
                     type="password"
-                    placeholder="Enter Password"
+                    placeholder="Password"
                     {...field}
                   />
                 </div>
@@ -93,11 +92,9 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <div className="text-center w-full">
-          <Button className="mt-2 h-8" type="submit">
-            Sign in
-          </Button>
-        </div>
+        <Button className="mt-2 h-9 w-full hover:scale-102" type="submit">
+          Sign in
+        </Button>
       </form>
     </Form>
   );
