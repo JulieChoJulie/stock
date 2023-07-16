@@ -28,29 +28,21 @@ const AuthCard: FC<Props> = ({ form, head, loginform }) => {
         <LoginGoogle />
         {loginform ? (
           <>
-            <div className="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
+            <div className="mt-5 text-xs border-b border-[#002D74] py-2 text-[#002D74]">
               Forgot your password?
             </div>
 
-            <div className="mt-3 text-xs flex justify-between items-center text-[#002D74]">
-              <p>Don&apos;t have an account?</p>
-              <button
-                type="button"
-                className="py-2 px-5 bg-white border rounded-xl hover:scale-102 duration-300"
-              >
-                <Link href="/sign-up">Register</Link>
-              </button>
+            <div className="mt-3 text-xs flex py-1 text-[#002D74]">
+              <Link href="/sign-up" className="ml-1 text-blue-500">
+                <p>Don&apos;t have an account?</p>
+              </Link>
             </div>
           </>
         ) : (
-          <div className="mt-3 text-xs flex justify-between items-center py-4 text-[#002D74]">
-            <p>Already have an account?</p>
-            <button
-              type="button"
-              className="py-2 px-5 bg-white border rounded-xl hover:scale-102 duration-300"
-            >
-              <Link href="/sign-in">Sign in with email</Link>
-            </button>
+          <div className="mt-3 text-xs flex justify-center items-center py-2 text-[#002D74]">
+            <Link href="/sign-in" className="ml-1 text-blue-500">
+              <p>Already have an account? </p>
+            </Link>
           </div>
         )}
       </CardContent>

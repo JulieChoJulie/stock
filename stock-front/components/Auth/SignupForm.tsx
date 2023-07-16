@@ -57,12 +57,12 @@ const SignupForm = () => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1.5">
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem className="mx-4">
+            <FormItem>
               <FormControl>
                 <div className="text-center">
                   <Input className="w-full" placeholder="Username" {...field} />
@@ -76,7 +76,7 @@ const SignupForm = () => {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="mx-4">
+            <FormItem>
               <FormControl>
                 <div className="text-center">
                   <Input className="w-full" placeholder="Email" {...field} />
@@ -90,7 +90,7 @@ const SignupForm = () => {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="mx-4">
+            <FormItem>
               <FormControl>
                 <div className="text-center">
                   <Input
@@ -109,7 +109,7 @@ const SignupForm = () => {
           control={form.control}
           name="confirm"
           render={({ field }) => (
-            <FormItem className="mx-4">
+            <FormItem>
               <FormControl>
                 <div className="text-center">
                   <Input

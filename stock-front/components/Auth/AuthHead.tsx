@@ -21,7 +21,7 @@ const AuthHead = ({ heading }: AuthHeadType) => {
           <Image src={logo} alt="logo" layout="fill" objectFit="cover" />
         </div>
       </div>
-      <h2 className="mt-4 text-center text-xl font-extrabold text-gray-900">
+      <h2 className="mt-4 text-center text-base font-extrabold text-gray-900">
         {heading}
       </h2>
     </div>
