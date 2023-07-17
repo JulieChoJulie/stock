@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/options";
 
-import SignupCard from "@/components/auth/SignupCard";
+import SignupCard from "@/components/Auth/SignupCard";
 
 // export default async function Home() {
 //   const session = await getServerSession(options);
