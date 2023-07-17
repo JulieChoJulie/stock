@@ -20,7 +20,7 @@ const AuthCard: FC<Props> = ({ form, head, loginform }) => {
       </CardHeader>
       <CardContent>
         {form}
-        <div className="mt-6 grid grid-cols-3 items-center text-gray-400">
+        <div className="mt-2 grid grid-cols-3 items-center text-gray-400">
           <hr className="border-gray-400" />
           <p className="text-center text-sm">OR</p>
           <hr className="border-gray-400" />
@@ -28,7 +28,7 @@ const AuthCard: FC<Props> = ({ form, head, loginform }) => {
         <LoginGoogle />
         {loginform ? (
           <>
-            <div className="mt-5 text-xs border-b border-[#002D74] py-2 text-[#002D74]">
+            <div className="mt-2 text-xs border-b border-[#002D74] py-2 text-[#002D74]">
               Forgot your password?
             </div>
 

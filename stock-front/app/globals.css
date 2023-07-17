@@ -7,6 +7,20 @@ body,
 :root {
   height: 100%;
 }
+
+/* Customize font sizes for specific screen sizes */
+@screen xs {
+  .text-xs {
+    font-size: 0.6rem;
+  }
+  .text-sm {
+    font-size: 0.65rem;
+  }
+  .logo {
+    width: 5rem;
+    height: 0.625rem;
+  }
+} 
  
 @layer base {
   :root {

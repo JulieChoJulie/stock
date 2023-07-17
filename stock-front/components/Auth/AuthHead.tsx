@@ -10,14 +10,7 @@ const AuthHead = ({ heading }: AuthHeadType) => {
   return (
     <div className="mb-1">
       <div className="flex justify-center">
-        <div
-          className="w-40 h-5 relative"
-          // style={{
-          //   position: "relative",
-          //   left: "50%",
-          //   transform: "translateX(-50%)",
-          // }}
-        >
+        <div className="w-40 h-5 relative logo">
           <Image src={logo} alt="logo" layout="fill" objectFit="cover" />
         </div>
       </div>
