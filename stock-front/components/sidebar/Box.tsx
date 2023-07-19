@@ -3,9 +3,10 @@ import { twMerge } from "tailwind-merge";
 interface BoxProps {
   children: React.ReactNode;
   className?: string;
+  active: boolean;
 }
 
-const Box: React.FC<BoxProps> = ({ children, className }) => {
+const Box: React.FC<BoxProps> = ({ children, className, active }) => {
   return (
     <div
       className={twMerge(
@@ -16,6 +17,7 @@ const Box: React.FC<BoxProps> = ({ children, className }) => {
     bg-slate-100
     `,
         className,
+        active && "bg-slate-300",
       )}
     >
       {children}

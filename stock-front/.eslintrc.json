@@ -20,6 +20,7 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "import/no-extraneous-dependencies": "off",
     "react/prop-types": 0,
     "no-console": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
@@ -36,14 +37,6 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-props-no-spreading": "off",
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true,
-        "optionalDependencies": true,
-        "peerDependencies": true
-      }
-    ],
     "@typescript-eslint/no-var-requires": "off",
     "no-nested-ternary": "off",
     "consistent-return": "off",

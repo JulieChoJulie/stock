@@ -1,58 +1,160 @@
 "use client";
 
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
+import { logoOnly } from "@/lib";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
-import { AiFillHome } from "react-icons/ai";
-import Box from "./Box";
-import SidebarItem from "./SidebarItem";
+import { twMerge } from "tailwind-merge";
+import {
+  BsArrowLeftShort,
+  BsChevronDown,
+  BsFileEarmarkPost,
+} from "react-icons/bs";
+import { MdScreenSearchDesktop } from "react-icons/md";
+import { GrMoney } from "react-icons/gr";
 
-interface SidebarProps {
-  children: React.ReactNode;
+interface Menutitle {
+  title: string;
 }
-const Sidebar: React.FC<SidebarProps> = ({ children }) => {
+
+interface Menu {
+  title: string;
+  icon: JSX.Element;
+  submenu: boolean;
+  submenuItems?: Menutitle[];
+  submenuLogin?: boolean;
+  login?: boolean;
+}
+
+const Sidebar = ({ children }: { children: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
   const pathname = usePathname();
-  const routes = useMemo(
-    () => [
-      {
-        icon: AiFillHome,
-        label: "Home",
-        active: pathname === "/",
-        href: "/",
+
+  const sidebarAnimation = {
+    // system view
+    open: {
+      width: "16rem",
+      transition: {
+        damping: 40,
       },
-      {
-        icon: AiFillHome,
-        label: "My clubs",
-        active: pathname === "/clubs",
-        href: "/clubs",
-      },
-    ],
-    [pathname],
-  );
+    },
+    closed: {
+      width: "4rem",
+      transition: { damping: 40 },
+    },
+  };
+
+  const menus: Menu[] = [
+    {
+      title: "Screener",
+      submenu: false,
+      icon: <MdScreenSearchDesktop />,
+    },
+    {
+      title: "Feeds",
+      submenu: true,
+      icon: <BsFileEarmarkPost />,
+      submenuLogin: true,
+      submenuItems: [
+        { title: "general" },
+        { title: "trends" },
+        { title: "value_investing" },
+      ],
+    },
+    {
+      title: "ticker",
+      submenu: true,
+      login: true,
+      icon: <GrMoney />,
+      submenuItems: [{ title: "AAPL" }, { title: "TSLA" }],
+    },
+  ];
+
   return (
-    <div className="flex h-full">
-      <div
-        className="
-        hidden
-        md:flex
-        flex-col
-        gap-y-2
-        bg-slate-50
-        h-full
-        w-[300px]
-        p-2
+    <>
+      <motion.div
+        variants={sidebarAnimation}
+        animate={isOpen ? "open" : "closed"}
+        className="bg-white text-gray shadow-xl z-[100] w-[16rem] max-w-[16rem]
+      p-3 h-screen md:relative fixed
     "
       >
-        <Box>
-          <div>
-            {routes.map((item) => (
-              <SidebarItem key={item.label} {...item} />
-            ))}
-          </div>
-        </Box>
-        <Box className="overflow-y-auto h-full">Feeds</Box>
-      </div>
-      <main className="h-full flex-1 overflow-y-auto">{children}</main>
-    </div>
+        <BsArrowLeftShort
+          onClick={() => setIsOpen(!isOpen)}
+          className={`bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
+            !isOpen && "rotate-180"
+          }`}
+        />
+
+        {/* Logo on sidebar */}
+
+        <div className="inline-col">
+          <Link className="flex h-fit" href="/">
+            <div className="w-10 h-10 relative logo mr-4">
+              <Image className="min-w-max" src={logoOnly} alt="logo" fill />
+            </div>
+            {isOpen && (
+              <h1 className={`text-2xl ${!isOpen && "scale-0"}`}>QuantQuant</h1>
+            )}
+          </Link>
+
+          {/* menus */}
+          <ul className="pt-1">
+            {menus.map((menu) => {
+              return (
+                <>
+                  <li
+                    key={`${menu.title}`}
+                    className="text-slate-700 text-sm flex items-center gap-x-4 
+                  cursor-pointer p-2 hover:bg-slate-100 rounded-md"
+                  >
+                    <span className="text-2xl block float-left">
+                      {menu.icon}
+                    </span>
+                    <span
+                      className={`text-base font-medium flex-1
+                  duration-200 ${!isOpen && "hidden"}
+                `}
+                    >
+                      {menu.title}
+                    </span>
+                    {menu.submenu && isOpen && (
+                      <BsChevronDown
+                        className={`${isSubmenuOpen && "rotate-180"}`}
+                        onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
+                      />
+                    )}
+                  </li>
+                  {menu.submenu && isSubmenuOpen && isOpen && (
+                    <ul>
+                      {menu?.submenuItems?.map((submenu) => {
+                        return (
+                          <li
+                            key={`${menu.title}_${submenu.title}`}
+                            className="text-gray-700 text-sm flex items-center
+                          gap-x-4 cursor-pointer p-2 px-5 hover:bg-slate-100
+                          rounded-md
+                          "
+                          >
+                            {submenu.title}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </>
+              );
+            })}
+          </ul>
+        </div>
+      </motion.div>
+      <main>
+        <div className="flex w-full h-screen">{children}</div>
+      </main>
+    </>
   );
 };
 

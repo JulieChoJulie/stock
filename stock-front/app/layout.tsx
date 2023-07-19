@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <Sidebar>{children}</Sidebar>
+        <div className="flex gap-5">
+          <Sidebar>{children}</Sidebar>
+        </div>
       </body>
     </html>
   );
