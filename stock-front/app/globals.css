@@ -31,6 +31,14 @@ body,
   @apply bg-blue-100 text-blue-600;
 }
 
+.submenu li{
+  border-radius: 16px;
+}
+
+.menu {
+  max-height: 85vh;
+}
+
 /* Customize font sizes for specific screen sizes */
 /* @screen xs {
   .text-xs {

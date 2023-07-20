@@ -11,12 +11,12 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
 
   return (
-    <>
+    <div className="submenu">
       <li
         key={`${menu.title}`}
-        className={`text-slate-700 text-sm flex items-center gap-x-4 
-                  cursor-pointer p-2 hover:bg-slate-100 rounded-md ${
-                    pathname.includes(menu.title) && "text-blue-400"
+        className={`text-slate-700 text-lg flex items-center gap-x-4 
+                  cursor-pointer p-2 hover:bg-slate-100 mb-1 ${
+                    pathname.includes(menu.title) && "active"
                   }
                  
                   `}
@@ -29,8 +29,8 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
           <span className="text-2xl block float-left mr-2">{menu.icon}</span>
 
           <span
-            className={`text-base font-medium flex-1
-                  duration-200 capitalize ${!isOpen && "hidden"}
+            className={`text-base font-medium flex-1 capitalize
+                  duration-400 ${!isOpen && "hidden"}
                 `}
           >
             {menu.title}
@@ -38,12 +38,13 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
         </div>
         {menu.submenu && isOpen && (
           <BsChevronDown
-            className={`${isSubmenuOpen && "rotate-180"}`}
+            className={`${isSubmenuOpen && "rotate-180"} duration-200`}
             onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
           />
         )}
       </li>
-      {menu.submenuItems && isSubmenuOpen && isOpen && (
+
+      {isSubmenuOpen && menu.submenuItems && isOpen && (
         <ul>
           {menu?.submenuItems?.map((submenu) => {
             const href: string = `/${menu.title}/${submenu.title}`;
@@ -60,7 +61,7 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
           })}
         </ul>
       )}
-    </>
+    </div>
   );
 };
 

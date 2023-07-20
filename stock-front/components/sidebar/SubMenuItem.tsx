@@ -8,9 +8,9 @@ const SubMenuItem: React.FC<SubMenuItemProps> = ({
 }) => {
   return (
     <li
-      className={`text-gray-700 text-sm flex items-center
+      className={`text-gray-700 text-base flex items-center
   gap-x-4 cursor-pointer p-2 px-5 hover:bg-slate-100
-  rounded-md ${isActive && "text-blue-400"}
+   ${isActive && "active"}
   `}
     >
       <Link className="w-full" href={href}>
