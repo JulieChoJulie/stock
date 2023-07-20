@@ -2,92 +2,102 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { logoOnly } from "@/lib";
 import Link from "next/link";
-import { BsArrowLeftShort, BsFileEarmarkPost } from "react-icons/bs";
-import { MdScreenSearchDesktop } from "react-icons/md";
-import { IoMdPricetags } from "react-icons/io";
-import { Menu } from "@/lib/types";
+import { BsArrowLeftShort } from "react-icons/bs";
+import { useMediaQuery } from "react-responsive";
+import { menus } from "@/lib/dummyData";
+import { MdMenu } from "react-icons/md";
 import SubMenu from "./SubMenu";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
+  const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" });
   const [isOpen, setIsOpen] = useState(true);
+  const pathname = usePathname();
+  const sidebarAnimation = isTab
+    ? // mobile view
+      {
+        open: {
+          x: 0,
+          width: "16rem",
+          transition: {
+            damping: 40,
+          },
+        },
+        closed: {
+          x: -250,
+          width: 0,
+          transition: { damping: 40, delay: 0.15 },
+        },
+      }
+    : // laptop view
+      {
+        open: {
+          width: "16rem",
+          transition: {
+            damping: 40,
+          },
+        },
+        closed: {
+          width: "4rem",
+          transition: { damping: 40 },
+        },
+      };
 
-  const sidebarAnimation = {
-    // system view
-    open: {
-      width: "16rem",
-      transition: {
-        damping: 40,
-      },
-    },
-    closed: {
-      width: "4rem",
-      transition: { damping: 40 },
-    },
-  };
+  useEffect(() => {
+    if (isTab) {
+      // mobile view
+      setIsOpen(false);
+    } else {
+      // laptop view
+      setIsOpen(true);
+    }
+  }, [isTab]);
 
-  const menus: Menu[] = [
-    {
-      title: "screener",
-      submenu: false,
-      icon: <MdScreenSearchDesktop />,
-    },
-    {
-      title: "feeds",
-      submenu: true,
-      icon: <BsFileEarmarkPost />,
-      submenuLogin: true,
-      submenuItems: [
-        { title: "general" },
-        { title: "trends" },
-        { title: "value_investing" },
-        { title: "1111111111111111111111111111111111111111" },
-        { title: "12" },
-        { title: "13" },
-        { title: "14" },
-        { title: "15" },
-        { title: "16" },
-        { title: "17" },
-        { title: "18" },
-        { title: "19" },
-        { title: "111" },
-        { title: "112" },
-        { title: "113" },
-        { title: "114" },
-        { title: "115" },
-        { title: "116" },
-        { title: "117" },
-        { title: "118" },
-        { title: "119" },
-        { title: "120" },
-      ],
-    },
-    {
-      title: "ticker",
-      submenu: true,
-      login: true,
-      icon: <IoMdPricetags />,
-      submenuItems: [{ title: "AAPL" }, { title: "TSLA" }],
-    },
-  ];
+  // close sidebr when the pathname is changed - mobile only
+  useEffect(() => {
+    if (isTab) {
+      setIsOpen(false);
+    }
+  }, [pathname, isTab]);
 
   return (
     <>
+      <div
+        role="presentation"
+        onClick={() => setIsOpen(false)}
+        className={`md:hidden fixed insert-0 max-h-screen z-[998] bg-black/50
+        w-full h-full
+      ${isOpen ? "block" : "hidden"}
+      `}
+      />
       <motion.div
         variants={sidebarAnimation}
+        initial={{ x: isTab ? -250 : 0 }}
         animate={isOpen ? "open" : "closed"}
-        className="bg-white text-gray shadow-xl z-[100] w-[16rem] max-w-[16rem]
+        className="bg-white text-gray shadow-xl z-[999] w-[16rem] max-w-[16rem]
       p-3 h-screen md:relative fixed
     "
       >
         <BsArrowLeftShort
           onClick={() => setIsOpen(!isOpen)}
-          className={`bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
+          className={`${
+            isTab && "hidden"
+          } bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
             !isOpen && "rotate-180"
-          }`}
+          } `}
         />
+        <div
+          className={`${
+            isTab && "hidden"
+          } bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
+            !isOpen && "rotate-180"
+          } `}
+        >
+          <BsArrowLeftShort onClick={() => setIsOpen(!isOpen)} />
+        </div>
 
         {/* Logo on sidebar */}
 
@@ -127,6 +137,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </motion.div>
+      <div
+        role="presentation"
+        className="m-3 h-fit md:hidden"
+        onClick={() => setIsOpen(true)}
+      >
+        <MdMenu size={25} />
+      </div>
       <main>
         <div className="flex w-full h-screen">{children}</div>
       </main>
