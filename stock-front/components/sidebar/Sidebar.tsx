@@ -6,31 +6,14 @@ import { useState } from "react";
 import { logoOnly } from "@/lib";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { twMerge } from "tailwind-merge";
-import {
-  BsArrowLeftShort,
-  BsChevronDown,
-  BsFileEarmarkPost,
-} from "react-icons/bs";
+import { BsArrowLeftShort, BsFileEarmarkPost } from "react-icons/bs";
 import { MdScreenSearchDesktop } from "react-icons/md";
 import { GrMoney } from "react-icons/gr";
-
-interface Menutitle {
-  title: string;
-}
-
-interface Menu {
-  title: string;
-  icon: JSX.Element;
-  submenu: boolean;
-  submenuItems?: Menutitle[];
-  submenuLogin?: boolean;
-  login?: boolean;
-}
+import { Menu } from "@/lib/types";
+import SubMenu from "./SubMenu";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
   const pathname = usePathname();
 
   const sidebarAnimation = {
@@ -49,12 +32,12 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
   const menus: Menu[] = [
     {
-      title: "Screener",
+      title: "screener",
       submenu: false,
       icon: <MdScreenSearchDesktop />,
     },
     {
-      title: "Feeds",
+      title: "feeds",
       submenu: true,
       icon: <BsFileEarmarkPost />,
       submenuLogin: true,
@@ -104,49 +87,16 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
           {/* menus */}
           <ul className="pt-1">
             {menus.map((menu) => {
+              if (menu.submenu) {
+                return <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />;
+              }
               return (
-                <>
-                  <li
-                    key={`${menu.title}`}
-                    className="text-slate-700 text-sm flex items-center gap-x-4 
-                  cursor-pointer p-2 hover:bg-slate-100 rounded-md"
-                  >
-                    <span className="text-2xl block float-left">
-                      {menu.icon}
-                    </span>
-                    <span
-                      className={`text-base font-medium flex-1
-                  duration-200 ${!isOpen && "hidden"}
-                `}
-                    >
-                      {menu.title}
-                    </span>
-                    {menu.submenu && isOpen && (
-                      <BsChevronDown
-                        className={`${isSubmenuOpen && "rotate-180"}`}
-                        onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
-                      />
-                    )}
-                  </li>
-                  {menu.submenu && isSubmenuOpen && isOpen && (
-                    <ul>
-                      {menu?.submenuItems?.map((submenu) => {
-                        return (
-                          <li
-                            key={`${menu.title}_${submenu.title}`}
-                            className="text-gray-700 text-sm flex items-center
-                          gap-x-4 cursor-pointer p-2 px-5 hover:bg-slate-100
-                          rounded-md
-                          "
-                          >
-                            {submenu.title}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </>
+                <Link href={`/${menu.title}`} key={menu.title}>
+                  <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
+                </Link>
               );
+
+              // return <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />;
             })}
           </ul>
         </div>
