@@ -7,6 +7,51 @@ body,
 :root {
   height: 100%;
 }
+
+@layer base {
+  html {
+    @apply font-serif;
+  }
+  body {
+    background: #f1f1f1;
+    margin: 0;
+  }
+  h1 {
+    @apply text-xl font-medium capitalize;
+  }
+}
+
+/* Sidebar menu class */
+.link {
+  @apply flex p-2.5 rounded-xl gap-6 items-center md:cursor-pointer 
+  cursor-default duration-300 font-medium;
+}
+
+.active {
+  @apply bg-blue-100 text-blue-600;
+}
+
+.submenu li{
+  border-radius: 16px;
+}
+
+.menu {
+  max-height: 85vh;
+}
+
+/* Customize font sizes for specific screen sizes */
+/* @screen xs {
+  .text-xs {
+    font-size: 0.6rem;
+  }
+  .text-sm {
+    font-size: 0.65rem;
+  }
+  .logo {
+    width: 5rem;
+    height: 0.625rem;
+  }
+} 
  
 @layer base {
   :root {
@@ -81,4 +126,4 @@ body,
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
