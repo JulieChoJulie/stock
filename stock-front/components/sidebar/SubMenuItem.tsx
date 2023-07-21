@@ -1,4 +1,4 @@
-import { SubMenuItemProps } from "@/lib/types";
+import { SubMenuItemProps } from "@/types/types";
 import Link from "next/link";
 
 const SubMenuItem: React.FC<SubMenuItemProps> = ({

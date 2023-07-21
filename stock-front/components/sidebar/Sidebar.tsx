@@ -1,16 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { logoOnly } from "@/lib";
 import Link from "next/link";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { useMediaQuery } from "react-responsive";
 import { menus } from "@/lib/dummyData";
 import { MdMenu } from "react-icons/md";
+import { logoFont } from "@/lib/utils";
 import SubMenu from "./SubMenu";
+import { Icons } from "../Icons";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" });
@@ -78,7 +78,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         initial={{ x: isTab ? -250 : 0 }}
         animate={isOpen ? "open" : "closed"}
         className="bg-white text-gray shadow-xl z-[999] w-[16rem] max-w-[16rem]
-      p-3 h-screen md:relative fixed
+      p-3 h-screen fixed
     "
       >
         <BsArrowLeftShort
@@ -102,13 +102,15 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         {/* Logo on sidebar */}
 
         <div className="inline-col">
-          <div className="flex flex-row items-center gap-2.5 border-b py-3 border-slate-300">
+          <div className="flex flex-row ml-[0.7rem] items-center gap-2.5 border-b py-3 border-slate-300">
             <Link className="flex h-fit" href="/">
-              <div className="w-10 h-10 relative logo mr-4">
-                <Image className="min-w-max" src={logoOnly} alt="logo" fill />
-              </div>
+              <Icons.LOGO className="w-10 h-10" />
               {isOpen && (
-                <h1 className={`text-2xl ${!isOpen && "scale-0"}`}>
+                <h1
+                  className={`text-xl ml-6 text-bold ${logoFont.className} ${
+                    !isOpen && "scale-0"
+                  }`}
+                >
                   QuantQuant
                 </h1>
               )}
@@ -139,14 +141,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
       </motion.div>
       <div
         role="presentation"
-        className="m-3 h-fit md:hidden"
+        className="fixed m-3 h-fit md:hidden z-[50]"
         onClick={() => setIsOpen(true)}
       >
         <MdMenu size={25} />
       </div>
-      <main>
-        <div className="flex w-full h-screen">{children}</div>
-      </main>
+      {/* <Navbar setIsOpen={setIsOpen} /> */}
+      <main className="w-full h-screen">{children}</main>
     </>
   );
 };

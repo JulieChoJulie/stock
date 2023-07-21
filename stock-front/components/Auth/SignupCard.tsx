@@ -1,5 +1,5 @@
-import AuthCard from "./AuthCard";
-import SignupForm from "./SignupForm";
+import AuthCard from "@/components/auth/AuthCard";
+import SignupForm from "@/components/auth/SignupForm";
 
 const SignupCard = () => {
   return (

@@ -1,7 +1,7 @@
 import { MdScreenSearchDesktop } from "react-icons/md";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { IoMdPricetags } from "react-icons/io";
-import { Menu } from "./types";
+import { Menu } from "../types/types";
 
 export const menus: Menu[] = [
   {

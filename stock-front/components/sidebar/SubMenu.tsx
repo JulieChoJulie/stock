@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { SubMenuProps } from "@/lib/types";
+import { SubMenuProps } from "@/types/types";
 import { BsChevronDown } from "react-icons/bs";
 import SubMenuItem from "./SubMenuItem";
 

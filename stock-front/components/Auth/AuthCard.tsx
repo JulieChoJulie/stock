@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React, { FC } from "react";
 import Link from "next/link";
-import AuthHead from "./AuthHead";
-import LoginGoogle from "./LoginGoogle";
+import AuthHead from "@/components/auth/AuthHead";
+import LoginGoogle from "@/components/auth/LoginGoogle";
 
 type Props = {
   form: React.ReactNode;

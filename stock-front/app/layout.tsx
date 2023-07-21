@@ -2,6 +2,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import Navbar from "@/components/Navbar";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -18,8 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <div className="flex gap-5">
-          <Sidebar>{children}</Sidebar>
+        <div className="flex gap-5 min-h-screen">
+          <Sidebar>
+            <div className="container max-w-7xl mx-auto">
+              <Navbar />
+              {children}
+            </div>
+          </Sidebar>
         </div>
       </body>
     </html>
