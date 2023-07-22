@@ -9,15 +9,16 @@ import SubMenuItem from "./SubMenuItem";
 const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
   const pathname = usePathname();
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
-
+  const isHome: boolean = menu.title === "home";
   return (
     <div className="submenu">
       <li
         key={`${menu.title}`}
         className={`text-slate-700 text-lg flex items-center gap-x-4 
                   cursor-pointer p-2 hover:bg-slate-100 mb-1 ${
-                    pathname.includes(menu.title) && "active"
+                    !isHome && pathname.includes(menu.title) && "active"
                   }
+                  ${isHome && pathname === "/" && "active"}
                  
                   `}
       >

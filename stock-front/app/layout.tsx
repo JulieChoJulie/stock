@@ -21,10 +21,8 @@ export default function RootLayout({
       <body className={font.className}>
         <div className="flex gap-5 min-h-screen">
           <Sidebar>
-            <div className="container max-w-7xl mx-auto">
-              <Navbar />
-              {children}
-            </div>
+            <Navbar />
+            <div className="container max-w-7xl mx-auto pt-12">{children}</div>
           </Sidebar>
         </div>
       </body>

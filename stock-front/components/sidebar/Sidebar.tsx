@@ -4,20 +4,18 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { BsArrowLeftShort } from "react-icons/bs";
-import { useMediaQuery } from "react-responsive";
 import { menus } from "@/lib/dummyData";
 import { MdMenu } from "react-icons/md";
-import { logoFont } from "@/lib/utils";
+import { useMediaQuery } from "react-responsive";
 import SubMenu from "./SubMenu";
-import { Icons } from "../Icons";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
-  const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" });
   const [isOpen, setIsOpen] = useState(true);
+  const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" });
   const pathname = usePathname();
-  const sidebarAnimation = isTab
-    ? // mobile view
+  const isHome: boolean = pathname === "/";
+  const sidebarAnimation = !isHome
+    ? // when not in home page
       {
         open: {
           x: 0,
@@ -47,107 +45,97 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
       };
 
   useEffect(() => {
-    if (isTab) {
-      // mobile view
-      setIsOpen(false);
-    } else {
-      // laptop view
+    if (isHome && !isTab) {
       setIsOpen(true);
-    }
-  }, [isTab]);
-
-  // close sidebr when the pathname is changed - mobile only
-  useEffect(() => {
-    if (isTab) {
+    } else {
       setIsOpen(false);
     }
-  }, [pathname, isTab]);
+  }, [isHome, isTab]);
+
+  // close sidebr when the pathname is changed
+  useEffect(() => {
+    if (!isHome && isTab) {
+      setIsOpen(false);
+    }
+  }, [pathname, isHome, isTab]);
 
   return (
     <>
       <div
         role="presentation"
         onClick={() => setIsOpen(false)}
-        className={`md:hidden fixed insert-0 max-h-screen z-[998] bg-black/50
+        className={`${
+          isHome && !isTab && "hidden"
+        } fixed insert-0 max-h-screen z-[998] bg-black/50
         w-full h-full
-      ${isOpen ? "block" : "hidden"}
+      ${isOpen ? "visible" : "hidden"}
       `}
       />
       <motion.div
         variants={sidebarAnimation}
-        initial={{ x: isTab ? -250 : 0 }}
+        initial={{ x: !isHome ? -250 : 0 }}
         animate={isOpen ? "open" : "closed"}
-        className="bg-white text-gray shadow-xl z-[999] w-[16rem] max-w-[16rem]
-      p-3 h-screen fixed
-    "
+        className={`fixed h-screen bg-white text-gray z-[998] w-[16rem] 
+        max-w-[16rem] p-3 pt-12
+        ${!isHome && "shadow-xl z-[999]"}
+        ${isTab && isOpen && "shadow-xl  z-[999]"}
+    `}
       >
-        <BsArrowLeftShort
+        {/* <BsArrowLeftShort
           onClick={() => setIsOpen(!isOpen)}
           className={`${
-            isTab && "hidden"
+            !isHome && "hidden"
           } bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
             !isOpen && "rotate-180"
           } `}
-        />
-        <div
+        /> */}
+        {/* <div
           className={`${
-            isTab && "hidden"
+            !isHome && "hidden"
           } bg-slate-500 text-white text-3xl rounded-full absolute -right-3 top-9 cursor-pointer ${
             !isOpen && "rotate-180"
           } `}
         >
           <BsArrowLeftShort onClick={() => setIsOpen(!isOpen)} />
-        </div>
+        </div> */}
 
-        {/* Logo on sidebar */}
-
-        <div className="inline-col">
-          <div className="flex flex-row ml-[0.7rem] items-center gap-2.5 border-b py-3 border-slate-300">
-            <Link className="flex h-fit" href="/">
-              <Icons.LOGO className="w-10 h-10" />
-              {isOpen && (
-                <h1
-                  className={`text-xl ml-6 text-bold ${logoFont.className} ${
-                    !isOpen && "scale-0"
-                  }`}
-                >
-                  QuantQuant
-                </h1>
-              )}
-            </Link>
-          </div>
-
-          {/* menus */}
-          <div className="flex flex-col menu">
-            <ul
-              className="pt-1 flex flex-col max-h-screen gap-1 scrollbar-thin scrollbar-track-white
+        {/* menus */}
+        <div className="flex flex-col menu">
+          <ul
+            className="pt-1 flex flex-col max-h-screen gap-1 scrollbar-thin scrollbar-track-white
              scrollbar-thumb-slate-100 overflow-x-hidden md:h-[68%] h-[70%]"
-            >
-              {menus.map((menu) => {
-                if (menu.submenu) {
-                  return (
-                    <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
-                  );
-                }
-                return (
-                  <Link href={`/${menu.title}`} key={menu.title}>
-                    <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
-                  </Link>
-                );
-              })}
-            </ul>
-          </div>
+          >
+            {menus.map((menu) => {
+              const href: string = menu.title === "home" ? "" : menu.title;
+              if (menu.submenu) {
+                return <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />;
+              }
+              return (
+                <Link href={`/${href}`} key={menu.title}>
+                  <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
+                </Link>
+              );
+            })}
+          </ul>
         </div>
       </motion.div>
       <div
         role="presentation"
-        className="fixed m-3 h-fit md:hidden z-[50]"
-        onClick={() => setIsOpen(true)}
+        className="fixed m-3 h-fit z-[1000] cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <MdMenu size={25} />
+        <MdMenu size={30} />
       </div>
-      {/* <Navbar setIsOpen={setIsOpen} /> */}
-      <main className="w-full h-screen">{children}</main>
+      <main
+        className={`${
+          isHome && !isTab && (isOpen ? "ml-[16.5rem]" : "ml-[4.5rem]")
+        }
+        ${!isOpen && isHome && isTab && "ml-[2.5rem]"}
+        w-full
+        `}
+      >
+        <div className="flex w-full h-screen">{children}</div>
+      </main>
     </>
   );
 };

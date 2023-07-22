@@ -12,13 +12,13 @@ type Props = {
 
 const AuthCard: FC<Props> = ({ form, head, loginform }) => {
   return (
-    <Card className="w-full">
+    <Card className="flex flex-col w-full max-w-[500px] items-center justify-center">
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="text-xl">
           <AuthHead heading={head} />
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="max-w-[300px] w-full">
         {form}
         <div className="mt-2 grid grid-cols-3 items-center text-gray-400">
           <hr className="border-gray-400" />

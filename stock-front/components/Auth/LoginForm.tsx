@@ -55,7 +55,7 @@ const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full space-y-1.5 p-2"
+        className="w-full space-y-2 p-2"
       >
         <FormField
           control={form.control}
