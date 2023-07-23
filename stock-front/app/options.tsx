@@ -1,38 +1,21 @@
-import type { NextAuthOptions } from "next-auth";
+import { getServerSession, type NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/lib/db";
 import { nanoid } from "nanoid";
 
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/sign-in",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text", placeholder: "Email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const user = {
-          id: "1",
-          email: "julie@gmail.com",
-          password: "julie11!",
-        };
-
-        if (
-          credentials?.email == user.email &&
-          credentials.password == user.password
-        ) {
-          return user;
-        }
-        return null;
-      },
     }),
   ],
   callbacks: {
@@ -44,9 +27,9 @@ export const options: NextAuthOptions = {
         session.user.image = token.picture;
         session.user.username = token.username;
       }
-
       return session;
     },
+
     async jwt({ token, user }) {
       const dbUser = await db.user.findFirst({
         where: {
@@ -69,11 +52,12 @@ export const options: NextAuthOptions = {
           },
         });
       }
+
       return {
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,
-        picture: dbUser.picture,
+        picture: dbUser.image,
         username: dbUser.username,
       };
     },
@@ -81,13 +65,6 @@ export const options: NextAuthOptions = {
       return "/";
     },
   },
-  pages: {
-    signIn: "/",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-  },
 };
+
+export const getAuthSession = () => getServerSession(options);
