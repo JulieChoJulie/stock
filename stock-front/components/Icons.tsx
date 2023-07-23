@@ -1,4 +1,4 @@
-import { LucideProps } from "lucide-react";
+import { LucideProps } from "lucide-react"
 
 export const Icons = {
   USER: (props: LucideProps) => (
@@ -62,4 +62,4 @@ export const Icons = {
       />
     </svg>
   ),
-};
+}

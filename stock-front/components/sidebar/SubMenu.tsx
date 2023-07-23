@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { SubMenuProps } from "@/types/types";
-import { BsChevronDown } from "react-icons/bs";
-import SubMenuItem from "./SubMenuItem";
+import { useState } from "react"
+import { usePathname } from "next/navigation"
+import { SubMenuProps } from "@/types/types"
+import { BsChevronDown } from "react-icons/bs"
+import SubMenuItem from "./SubMenuItem"
 
 const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
-  const pathname = usePathname();
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
-  const isHome: boolean = menu.title === "home";
+  const pathname = usePathname()
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
+  const isHome: boolean = menu.title === "home"
   return (
     <div className="submenu">
       <li
@@ -48,8 +48,8 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
       {isSubmenuOpen && menu.submenuItems && isOpen && (
         <ul>
           {menu?.submenuItems?.map((submenu) => {
-            const href: string = `/${menu.title}/${submenu.title}`;
-            const isActive: boolean = pathname.includes(href);
+            const href: string = `/${menu.title}/${submenu.title}`
+            const isActive: boolean = pathname.includes(href)
             return (
               <div key={`${menu.title}_${submenu.title}`}>
                 <SubMenuItem
@@ -58,12 +58,12 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
                   isActive={isActive}
                 />
               </div>
-            );
+            )
           })}
         </ul>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SubMenu;
+export default SubMenu

@@ -20,12 +20,15 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "semi": ["error", "never"],
+    "@typescript-eslint/semi": "off",
+    "no-unexpected-multiline": "error",
     "import/prefer-default-export": "off",
     "react/button-has-type": "off",
     "import/no-extraneous-dependencies": "off",
     "react/prop-types": 0,
     "no-console": "off",
-    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "prettier/prettier": ["error", { "semi": false }, { "endOfLine": "auto" }],
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
     "import/extensions": [

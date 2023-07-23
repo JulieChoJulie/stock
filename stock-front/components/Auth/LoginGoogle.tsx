@@ -1,30 +1,30 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "../ui/button";
-import { Icons } from "../Icons";
+import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useToast } from "@/hooks/use-toast"
+import { Button } from "../ui/button"
+import { Icons } from "../Icons"
 
 const LoginGoogle = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { toast } = useToast()
   const loginWithGoogle = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      await signIn("google");
+      await signIn("google")
     } catch (error) {
       // toast notification
       toast({
         title: "Google Login Error",
         description: "There was a error logging in with Google.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
   return (
     <Button
       type="button"
@@ -35,7 +35,7 @@ const LoginGoogle = () => {
       {isLoading ? null : <Icons.GOOGLE />}
       Login with Google
     </Button>
-  );
-};
+  )
+}
 
-export default LoginGoogle;
+export default LoginGoogle

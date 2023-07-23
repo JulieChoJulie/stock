@@ -1,10 +1,8 @@
-import Image from "next/image";
-import React from "react";
-import { logo } from "@/lib";
+import React from "react"
 
 type AuthHeadType = {
-  heading: string;
-};
+  heading: string
+}
 
 const AuthHead = ({ heading }: AuthHeadType) => {
   return (
@@ -18,7 +16,7 @@ const AuthHead = ({ heading }: AuthHeadType) => {
         {heading}
       </h2>
     </div>
-  );
-};
+  )
+}
 
-export default AuthHead;
+export default AuthHead

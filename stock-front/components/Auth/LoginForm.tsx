@@ -1,27 +1,25 @@
-"use client";
+"use client"
 
-import { signIn } from "next-auth/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { signIn } from "next-auth/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 // const passwordValidation = new RegExp(
 //   "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})",
 // );
-const passwordValidation =
-  /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+const passwordValidation = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
 
 const FormSchema = z.object({
   email: z
@@ -30,7 +28,7 @@ const FormSchema = z.object({
     .optional(),
   password: z.string().refine(
     (val) => {
-      return passwordValidation.test(val);
+      return passwordValidation.test(val)
     },
     {
       message:
@@ -38,18 +36,18 @@ const FormSchema = z.object({
     },
   ),
   confirm: z.string(),
-});
+})
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     signIn("credentials", {
       email: data.email,
       password: data.password,
-    });
+    })
   }
   return (
     <Form {...form}>
@@ -97,7 +95,7 @@ const LoginForm = () => {
         </Button>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

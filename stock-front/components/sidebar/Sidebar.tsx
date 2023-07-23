@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { menus } from "@/lib/dummyData";
-import { MdMenu } from "react-icons/md";
-import { useMediaQuery } from "react-responsive";
-import SubMenu from "./SubMenu";
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { menus } from "@/lib/dummyData"
+import { MdMenu } from "react-icons/md"
+import { useMediaQuery } from "react-responsive"
+import SubMenu from "./SubMenu"
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" });
-  const pathname = usePathname();
-  const isHome: boolean = pathname === "/";
+  const [isOpen, setIsOpen] = useState(true)
+  const isTab: boolean = useMediaQuery({ query: "(max-width: 768px)" })
+  const pathname = usePathname()
+  const isHome: boolean = pathname === "/"
   const sidebarAnimation = !isHome
     ? // when not in home page
       {
@@ -42,22 +42,22 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
           width: "4rem",
           transition: { damping: 40 },
         },
-      };
+      }
 
   useEffect(() => {
     if (isHome && !isTab) {
-      setIsOpen(true);
+      setIsOpen(true)
     } else {
-      setIsOpen(false);
+      setIsOpen(false)
     }
-  }, [isHome, isTab]);
+  }, [isHome, isTab])
 
   // close sidebr when the pathname is changed
   useEffect(() => {
     if (!isHome && isTab) {
-      setIsOpen(false);
+      setIsOpen(false)
     }
-  }, [pathname, isHome, isTab]);
+  }, [pathname, isHome, isTab])
 
   return (
     <>
@@ -106,15 +106,15 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
              scrollbar-thumb-slate-100 overflow-x-hidden md:h-[68%] h-[70%]"
           >
             {menus.map((menu) => {
-              const href: string = menu.title === "home" ? "" : menu.title;
+              const href: string = menu.title === "home" ? "" : menu.title
               if (menu.submenu) {
-                return <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />;
+                return <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
               }
               return (
                 <Link href={`/${href}`} key={menu.title}>
                   <SubMenu key={menu.title} menu={menu} isOpen={isOpen} />
                 </Link>
-              );
+              )
             })}
           </ul>
         </div>
@@ -137,7 +137,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         <div className="flex w-full h-screen">{children}</div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

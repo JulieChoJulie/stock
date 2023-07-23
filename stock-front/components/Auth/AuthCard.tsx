@@ -1,14 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React, { FC } from "react";
-import Link from "next/link";
-import AuthHead from "@/components/auth/AuthHead";
-import LoginGoogle from "@/components/auth/LoginGoogle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import React, { FC } from "react"
+import Link from "next/link"
+import AuthHead from "@/components/auth/AuthHead"
+import LoginGoogle from "@/components/auth/LoginGoogle"
 
 type Props = {
-  form: React.ReactNode;
-  head: string;
-  loginform: boolean;
-};
+  form: React.ReactNode
+  head: string
+  loginform: boolean
+}
 
 const AuthCard: FC<Props> = ({ form, head, loginform }) => {
   return (
@@ -47,7 +47,7 @@ const AuthCard: FC<Props> = ({ form, head, loginform }) => {
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AuthCard;
+export default AuthCard

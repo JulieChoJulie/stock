@@ -1,23 +1,21 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 
 import {
   Form,
   FormField,
   FormItem,
   FormControl,
-  FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
-const passwordValidation =
-  /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+const passwordValidation = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
 
 const FormSchema = z
   .object({
@@ -32,7 +30,7 @@ const FormSchema = z
     email: z.string().email({ message: "Please enter a valid email address." }),
     password: z.string().refine(
       (val) => {
-        return passwordValidation.test(val);
+        return passwordValidation.test(val)
       },
       {
         message:
@@ -44,16 +42,16 @@ const FormSchema = z
   .refine((data) => data.password === data.confirm, {
     message: "Passwords don't match",
     path: ["confirm"], // path of error
-  });
+  })
 
 const SignupForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     // Sign up
-    console.log(data);
+    console.log(data)
   }
   return (
     <Form {...form}>
@@ -131,7 +129,7 @@ const SignupForm = () => {
         </div>{" "}
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default SignupForm;
+export default SignupForm
