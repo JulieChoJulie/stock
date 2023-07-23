@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
             <div className="container max-w-7xl mx-auto pt-12">{children}</div>
           </Sidebar>
         </div>
+        <Toaster />
       </body>
     </html>
   );
