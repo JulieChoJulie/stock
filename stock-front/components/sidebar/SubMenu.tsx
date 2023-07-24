@@ -1,15 +1,24 @@
 "use client"
 
 import { useState } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { SubMenuProps } from "@/types/types"
 import { BsChevronDown } from "react-icons/bs"
 import SubMenuItem from "./SubMenuItem"
 
 const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
   const pathname = usePathname()
+  const router = useRouter()
+
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
   const isHome: boolean = menu.title === "home"
+  const onClickSubMenu = () => {
+    if (!isOpen && menu.submenu && menu.submenuItems) {
+      router.push(`/${menu.title}/${menu?.submenuItems[0].title}`)
+    } else {
+      setIsSubmenuOpen(!isSubmenuOpen)
+    }
+  }
   return (
     <div className="submenu">
       <li
@@ -22,11 +31,7 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
                  
                   `}
       >
-        <div
-          className="w-full"
-          role="presentation"
-          onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
-        >
+        <div className="w-full" role="presentation" onClick={onClickSubMenu}>
           <span className="text-2xl block float-left mr-2">{menu.icon}</span>
 
           <span

@@ -14,23 +14,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  authModal,
 }: {
   children: React.ReactNode
-  authModal: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body className={font.className}>
         <Providers>
           <div className="flex gap-5 min-h-screen">
-            <Sidebar>
-              <Navbar />
-              {authModal}
-              <div className="container max-w-7xl mx-auto pt-16">
-                {children}
-              </div>
-            </Sidebar>
+            <Sidebar />
+            <Navbar />
+            <div className="container h-screen max-w-7xl mx-auto pt-16 md:ml-[3rem]">
+              {children}
+            </div>
           </div>
           <Toaster />
         </Providers>

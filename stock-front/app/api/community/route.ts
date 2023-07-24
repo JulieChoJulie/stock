@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { z } from "zod"
-// import { CommunityValidator } from "@/lib/validators/community"
+import { CommunityValidator } from "@/lib/validators/community"
 
 export async function POST(req: Request) {
   try {
@@ -41,7 +41,8 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 })
     }
-
-    return new Response("Could not create a community.", { status: 500 })
+    return new Response("Could not create a community. Try again later.", {
+      status: 500,
+    })
   }
 }

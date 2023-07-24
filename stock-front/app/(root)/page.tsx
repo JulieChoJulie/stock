@@ -26,11 +26,10 @@ const Home = () => {
   console.log(entities)
 
   return (
-    <div>
+    <div className="ml-[3rem] md:ml-[11rem]">
       {value}
       <button onClick={() => dispatch(increment())}>Click me</button>
       {loading && <h1>Loading</h1>}
-      {entities?.map((user: any) => <h3 key={user.name}>{user.name}</h3>)}
     </div>
   )
 }

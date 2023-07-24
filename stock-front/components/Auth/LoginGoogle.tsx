@@ -30,7 +30,8 @@ const LoginGoogle = () => {
       type="button"
       onClick={loginWithGoogle}
       isLoading={isLoading}
-      className="bg-white border py-1 w-full rounded-xl mt-2 flex justify-center items-center text-base hover:scale-103 duration-300 text-[#002D74]"
+      className="bg-white border py-1 w-full rounded-xl mt-2 flex justify-center items-center text-base 
+      hover:scale-103 hover:bg-slate-200 duration-300 text-[#002D74]"
     >
       {isLoading ? null : <Icons.GOOGLE />}
       Login with Google
