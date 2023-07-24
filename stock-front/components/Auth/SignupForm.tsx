@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-
 import { Button } from "@/components/ui/button"
 
 import {
@@ -45,14 +46,33 @@ const FormSchema = z
   })
 
 const SignupForm = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    // Sign up
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setIsLoading(true)
+
+    try {
+      // await signUp("credentials", {
+      // username: data.username,
+      //   email: data.email,
+      //   password: data.password,
+      // })
+    } catch (error) {
+      // toast notification
+      toast({
+        title: "Sign up Error",
+        description: "There was a error Signing up",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -123,10 +143,14 @@ const SignupForm = () => {
           )}
         />
         <div className="text-center w-full">
-          <Button className="mt-2 h-8 w-full group-default:" type="submit">
+          <Button
+            isLoading={isLoading}
+            className="mt-2 h-8 w-full group-default:"
+            type="submit"
+          >
             Sign up
           </Button>
-        </div>{" "}
+        </div>
       </form>
     </Form>
   )

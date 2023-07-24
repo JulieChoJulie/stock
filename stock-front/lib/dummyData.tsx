@@ -1,8 +1,8 @@
-import { MdScreenSearchDesktop } from "react-icons/md";
-import { BsFileEarmarkPost } from "react-icons/bs";
-import { IoMdPricetags } from "react-icons/io";
-import { AiFillHome } from "react-icons/ai";
-import { Menu } from "../types/types";
+import { MdScreenSearchDesktop } from "react-icons/md"
+import { BsFileEarmarkPost } from "react-icons/bs"
+import { IoMdPricetags } from "react-icons/io"
+import { AiFillHome } from "react-icons/ai"
+import { Menu } from "../types/types"
 
 export const menus: Menu[] = [
   {
@@ -52,4 +52,4 @@ export const menus: Menu[] = [
     icon: <IoMdPricetags />,
     submenuItems: [{ title: "AAPL" }, { title: "TSLA" }],
   },
-];
+]

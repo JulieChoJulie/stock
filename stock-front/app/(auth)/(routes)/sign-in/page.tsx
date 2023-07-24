@@ -1,6 +1,5 @@
-import LoginCard from "@/components/auth/LoginCard";
+import LoginCard from "@/components/auth/LoginCard"
 
-export default async function Home() {
-  //   const session = await getServerSession(options);
-  return <LoginCard />;
+export default function Home() {
+  return <LoginCard />
 }

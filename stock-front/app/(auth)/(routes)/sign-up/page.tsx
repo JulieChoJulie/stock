@@ -1,13 +1,6 @@
-import { getServerSession } from "next-auth/next";
-import { options } from "@/app/options";
+import { getServerSession } from "next-auth/next"
+import SignupCard from "@/components/auth/SignupCard"
 
-import SignupCard from "@/components/auth/SignupCard";
-
-// export default async function Home() {
-//   const session = await getServerSession(options);
-//   return <>{session ? <div>{session.user?.name}</div> : <SignupCard />}</>;
-// }
-
-export default async function Home() {
-  return <SignupCard />;
+export default function Home() {
+  return <SignupCard />
 }
