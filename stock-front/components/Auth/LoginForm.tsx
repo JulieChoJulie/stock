@@ -45,13 +45,6 @@ const LoginForm = () => {
     resolver: zodResolver(FormSchema),
   })
 
-  // function onSubmit(data: z.infer<typeof FormSchema>) {
-  //   signIn("credentials", {
-  //     email: data.email,
-  //     password: data.password,
-  //   })
-  // }
-
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setIsLoading(true)
 

@@ -4,9 +4,9 @@ import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 import Navbar from "@/components/Navbar"
 import { Toaster } from "@/components/ui/toaster"
+import { Providers } from "./Providers"
 
 const font = Nunito({ subsets: ["latin"] })
-
 export const metadata: Metadata = {
   title: "QuantQuant",
   description: "Stock investment community",
@@ -22,14 +22,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <div className="flex gap-5 min-h-screen">
-          <Sidebar>
-            <Navbar />
-            {authModal}
-            <div className="container max-w-7xl mx-auto pt-12">{children}</div>
-          </Sidebar>
-        </div>
-        <Toaster />
+        <Providers>
+          <div className="flex gap-5 min-h-screen">
+            <Sidebar>
+              <Navbar />
+              {authModal}
+              <div className="container max-w-7xl mx-auto pt-16">
+                {children}
+              </div>
+            </Sidebar>
+          </div>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )

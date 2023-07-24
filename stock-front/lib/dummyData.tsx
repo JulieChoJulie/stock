@@ -16,7 +16,7 @@ export const menus: Menu[] = [
     icon: <MdScreenSearchDesktop />,
   },
   {
-    title: "feeds",
+    title: "feed",
     submenu: true,
     icon: <BsFileEarmarkPost />,
     submenuLogin: true,

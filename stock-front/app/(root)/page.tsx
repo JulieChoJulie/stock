@@ -1,7 +1,38 @@
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useEffect, useRef } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchUsers, increment } from "@/slices/userSlice"
+import { AppDispatch, RootState } from "@/store/store"
 
 const Home = () => {
-  return <div className="h-[1800px]">Main Content</div>;
-};
+  const { entities, loading, value } = useSelector(
+    (state: RootState) => state.user,
+  )
+  const userRef = useRef(false)
+  const dispatch = useDispatch<AppDispatch>()
 
-export default Home;
+  console.log("loading: ", loading)
+
+  useEffect(() => {
+    if (userRef.current === false) {
+      dispatch(fetchUsers())
+    }
+    return () => {
+      userRef.current = true
+    }
+  }, [dispatch])
+
+  console.log(entities)
+
+  return (
+    <div>
+      {value}
+      <button onClick={() => dispatch(increment())}>Click me</button>
+      {loading && <h1>Loading</h1>}
+      {entities?.map((user: any) => <h3 key={user.name}>{user.name}</h3>)}
+    </div>
+  )
+}
+
+export default Home
