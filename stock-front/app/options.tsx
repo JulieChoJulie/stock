@@ -2,10 +2,8 @@ import { getServerSession, type NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-
 import { db } from "@/lib/db"
 import { nanoid } from "nanoid"
-import { RequestCookiesAdapter } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(db),
