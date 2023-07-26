@@ -9,6 +9,7 @@ import { Icons } from "../Icons"
 const LoginGoogle = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { toast } = useToast()
+
   const loginWithGoogle = async () => {
     setIsLoading(true)
 

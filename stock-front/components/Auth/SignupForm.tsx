@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
 import { Button } from "@/components/ui/button"
 
 import {
@@ -15,44 +14,16 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
-const passwordValidation = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
-
-const FormSchema = z
-  .object({
-    username: z
-      .string()
-      .min(2, {
-        message: "Username must be at least 2 characters.",
-      })
-      .max(10, {
-        message: "Username must be less than 10 characters.",
-      }),
-    email: z.string().email({ message: "Please enter a valid email address." }),
-    password: z.string().refine(
-      (val) => {
-        return passwordValidation.test(val)
-      },
-      {
-        message:
-          "Your password should be at least 8 characters long that include at least one letter, one special character and one number.",
-      },
-    ),
-    confirm: z.string(),
-  })
-  .refine((data) => data.password === data.confirm, {
-    message: "Passwords don't match",
-    path: ["confirm"], // path of error
-  })
+import { SignupFormSchema, SignupFormType } from "@/lib/validators/auth"
 
 const SignupForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { toast } = useToast()
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<SignupFormType>({
+    resolver: zodResolver(SignupFormSchema),
   })
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: SignupFormType) => {
     setIsLoading(true)
 
     try {

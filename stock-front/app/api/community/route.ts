@@ -2,13 +2,17 @@ import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { z } from "zod"
 import { CommunityValidator } from "@/lib/validators/community"
+import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   try {
     const session = await getAuthSession()
 
     if (!session?.user) {
-      return new Response("Unauthorized", { status: 401 })
+      return new Response("Login Required", {
+        status: 401,
+        statusText: "Login Required",
+      })
     }
 
     const body = await req.json()
@@ -19,7 +23,8 @@ export async function POST(req: Request) {
     })
 
     if (communityExists) {
-      return new Response(`Community ${name} already exists`, { status: 409 })
+      const message: string = `Community "${name}" already exists`
+      return new Response(null, { status: 409, statusText: message })
     }
 
     const community = await db.community.create({
@@ -39,10 +44,14 @@ export async function POST(req: Request) {
     return new Response(community.name)
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 })
+      const message: string =
+        "Please choose a name between 3 and 20 characters."
+      return new Response(null, { status: 422, statusText: message })
     }
-    return new Response("Could not create a community. Try again later.", {
+    const message: string = "Could not create a community. Try again later."
+    return new Response(null, {
       status: 500,
+      statusText: message,
     })
   }
 }

@@ -95,8 +95,18 @@ export const options: NextAuthOptions = {
         username: dbUser.username,
       }
     },
-    redirect() {
-      return "/"
+    redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) {
+        const urlObj = new URL(url)
+        if (urlObj.searchParams.get("callbackUrl")) {
+          return `${baseUrl}${urlObj.searchParams.get("callbackUrl")}`
+        }
+        return url
+      }
+      return baseUrl
     },
   },
 }

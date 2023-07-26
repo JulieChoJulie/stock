@@ -6,8 +6,7 @@ import { useToast } from "@/hooks/use-toast"
 import { signIn } from "next-auth/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
-
+import { LoginFormSchema, LoginFormType } from "@/lib/validators/auth"
 import { Button } from "@/components/ui/button"
 
 import {
@@ -19,33 +18,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-const passwordValidation = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
-
-const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Please enter a valid email address." })
-    .optional(),
-  password: z.string().refine(
-    (val) => {
-      return passwordValidation.test(val)
-    },
-    {
-      message:
-        "Your password should be at least 8 characters long that include at least one letter, one special character and one number.",
-    },
-  ),
-  confirm: z.string(),
-})
-
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { toast } = useToast()
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<LoginFormType>({
+    resolver: zodResolver(LoginFormSchema),
   })
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: LoginFormType) => {
     setIsLoading(true)
 
     try {

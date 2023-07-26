@@ -6,30 +6,31 @@ import { fetchUsers, increment } from "@/slices/userSlice"
 import { AppDispatch, RootState } from "@/store/store"
 
 const Home = () => {
-  const { entities, loading, value } = useSelector(
-    (state: RootState) => state.user,
-  )
-  const userRef = useRef(false)
-  const dispatch = useDispatch<AppDispatch>()
+  // const { entities, loading, value } = useSelector(
+  //   (state: RootState) => state.user,
+  // )
+  // const userRef = useRef(false)
+  // const dispatch = useDispatch<AppDispatch>()
 
-  console.log("loading: ", loading)
+  // console.log("loading: ", loading)
 
-  useEffect(() => {
-    if (userRef.current === false) {
-      dispatch(fetchUsers())
-    }
-    return () => {
-      userRef.current = true
-    }
-  }, [dispatch])
+  // useEffect(() => {
+  //   if (userRef.current === false) {
+  //     dispatch(fetchUsers())
+  //   }
+  //   return () => {
+  //     userRef.current = true
+  //   }
+  // }, [dispatch])
 
-  console.log(entities)
+  // console.log(entities)
 
   return (
     <div className="ml-[3rem] md:ml-[11rem]">
-      {value}
+      Home page
+      {/* {value}
       <button onClick={() => dispatch(increment())}>Click me</button>
-      {loading && <h1>Loading</h1>}
+      {loading && <h1>Loading</h1>} */}
     </div>
   )
 }
