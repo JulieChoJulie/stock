@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { fetchUsers, increment } from "@/slices/userSlice"
+import { fetchUsers, increment } from "@/redux/slices/userSlice"
 import { AppDispatch, RootState } from "@/store/store"
 
 const Home = () => {

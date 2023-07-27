@@ -2,45 +2,44 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useCustomToast } from "@/hooks/use-custom-toast"
 import { toast } from "@/hooks/use-toast"
-import { postComunity } from "@/slices/communitySlice"
-import { AppDispatch, RootState } from "@/store/store"
+import { useCreateCommunityMutation } from "@/redux/services/community/communityApi"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 
 const Page = () => {
   const [input, setInput] = useState<string>("")
-  const { loading, error, status, createdCommunity } = useSelector(
-    (state: RootState) => state.community,
-  )
   const router = useRouter()
-  const dispatch = useDispatch<AppDispatch>()
-  const { loginToast } = useCustomToast("%2Fc%2Fcreate")
+  const [createCommunity, { error, isLoading }] = useCreateCommunityMutation()
 
-  const createCommunity = () => dispatch(postComunity(input))
+  const createdCommunity = () => {
+    createCommunity(input)
+      .unwrap()
+      .then((payload) => {
+        toast({
+          title: "Successful!",
+          description: `Community "${payload}" is created.`,
+        })
+        router.push(`/c/${payload}`)
+      })
+      .catch((err) => {
+        const { status } = err
+        if (status === 401) {
+          router.push("/sign-in?callbackUrl=%2Fc%2Fcreate")
+        } else if (status !== 409 && status !== 422) {
+          toast({
+            title: "Internal Error",
+            description: "Could not create a community. Please try later.",
+            variant: "destructive",
+          })
+        }
+      })
+    setInput("")
+  }
 
   useEffect(() => {
-    if (status === 401) {
-      // return loginToast()
-      router.push("/sign-in?callbackUrl=%2Fc%2Fcreate")
-    }
-    if (status === 200) {
-      toast({
-        title: "Successful",
-        description: `Community ${createdCommunity} is created.`,
-      })
-      router.push(`/c/${createdCommunity}`)
-    }
-    if (status === 500) {
-      toast({
-        title: "Internal Error",
-        description: "Could not create a community",
-        variant: "destructive",
-      })
-    }
-  }, [status, loginToast, createdCommunity, router])
+    console.log(error)
+  }, [error])
 
   return (
     <div className="container flex items-center justify-center h-full max-w-3xl mx-auto pb-16">
@@ -65,7 +64,10 @@ const Page = () => {
             />
           </div>
         </div>
-        <div className="text-red-600">{error}</div>
+
+        {error?.data && error?.data?.message && (
+          <div className="text-red-600">{error.data.message}</div>
+        )}
         <div className="flex justify-end gap-4">
           <Button
             variant="subtle"
@@ -75,9 +77,9 @@ const Page = () => {
             Cancel
           </Button>
           <Button
-            isLoading={loading}
+            isLoading={isLoading}
             disabled={input.length < 3}
-            onClick={() => createCommunity(input)}
+            onClick={() => createdCommunity()}
           >
             Create Community
           </Button>
