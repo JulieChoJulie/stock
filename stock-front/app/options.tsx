@@ -17,6 +17,9 @@ export const options: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      httpOptions: {
+        timeout: 90000000,
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -102,7 +105,11 @@ export const options: NextAuthOptions = {
       if (new URL(url).origin === baseUrl) {
         const urlObj = new URL(url)
         if (urlObj.searchParams.get("callbackUrl")) {
-          return `${baseUrl}${urlObj.searchParams.get("callbackUrl")}`
+          const search = urlObj.searchParams.get("callbackUrl")
+          if (search?.startsWith("/")) {
+            return `${baseUrl}${urlObj.searchParams.get("callbackUrl")}`
+          }
+          return search
         }
         return url
       }
