@@ -4,9 +4,11 @@ export const CommunityValidator = z.object({
   name: z.string().min(3).max(20),
 })
 
-export const CommunitySubscription = z.object({
+export const CommunitySubscriptionValidator = z.object({
   communityId: z.string(),
 })
 
 export type CreateCommunityPayload = z.infer<typeof CommunityValidator>
-export type CommunitySubscription = z.infer<typeof CommunitySubscription>
+export type CommunitySubscriptionPayload = z.infer<
+  typeof CommunitySubscriptionValidator
+>

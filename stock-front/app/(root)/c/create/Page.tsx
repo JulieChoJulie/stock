@@ -5,17 +5,18 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
 import { useCreateCommunityMutation } from "@/redux/services/community/communityApi"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 
 const Page = () => {
   const [input, setInput] = useState<string>("")
   const router = useRouter()
   const [createCommunity, { error, isLoading }] = useCreateCommunityMutation()
 
-  const createdCommunity = () => {
+  const createdCommunity = useCallback(() => {
     createCommunity(input)
       .unwrap()
       .then((payload) => {
+        console.log(payload)
         toast({
           title: "Successful!",
           description: `Community "${payload}" is created.`,
@@ -35,11 +36,7 @@ const Page = () => {
         }
       })
     setInput("")
-  }
-
-  useEffect(() => {
-    console.log(error)
-  }, [error])
+  }, [createCommunity, input, router])
 
   return (
     <div className="container flex items-center justify-center h-full max-w-3xl mx-auto pb-16">

@@ -11,6 +11,8 @@ export type KnownError = {
 export interface communityState {
   createdCommunity: string
   loading: boolean
+  isSubscription: boolean
+  memberCount: number
   error: string | null
   status: number | null
 }

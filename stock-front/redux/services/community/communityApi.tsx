@@ -22,7 +22,34 @@ export const communityApi = createApi({
         }
       },
     }),
+    subscribeCommunity: builder.mutation<void, string>({
+      query: (communityId) => {
+        return {
+          url: `community/subscribe`,
+          method: "POST",
+          body: {
+            communityId,
+          },
+          responseHandler: (response) => response.text(),
+        }
+      },
+    }),
+    unsubscribeCommunity: builder.mutation<void, string>({
+      query: (communityId) => {
+        return {
+          url: `community/unsubscribe`,
+          method: "POST",
+          body: { communityId },
+          responseHandler: (response) => response.text(),
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetAllQuery, useCreateCommunityMutation } = communityApi
+export const {
+  useGetAllQuery,
+  useCreateCommunityMutation,
+  useSubscribeCommunityMutation,
+  useUnsubscribeCommunityMutation,
+} = communityApi

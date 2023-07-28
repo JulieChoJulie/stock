@@ -16,6 +16,7 @@ const UserAvatar: FC<UserAvatarProps> = ({ user, ...props }) => {
         <div className="relative aspect-square h-full w-full">
           <Image
             fill
+            sizes={25}
             src={user.image}
             alt="profile image"
             referrerPolicy="no-referrer"
