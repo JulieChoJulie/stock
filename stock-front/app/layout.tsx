@@ -4,7 +4,8 @@ import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 import Navbar from "@/components/Navbar"
 import { Toaster } from "@/components/ui/toaster"
-import { Providers } from "./Providers"
+import Providers from "./Providers"
+import { NextAuthProvider } from "./NextAuthProvider"
 
 const font = Nunito({ subsets: ["latin"] })
 export const metadata: Metadata = {
@@ -23,15 +24,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <Providers>
-          <div className="flex gap-5 min-h-screen">
-            <Sidebar />
-            <Navbar />
-            {authModal}
-            <div className="container h-screen max-w-7xl mx-auto pt-16 md:ml-[3rem]">
-              {children}
+          <NextAuthProvider>
+            <div className="flex gap-5 min-h-screen">
+              <Sidebar />
+              <Navbar />
+              {authModal}
+              <div className="container h-screen max-w-7xl mx-auto pt-16 md:ml-[3rem]">
+                {children}
+              </div>
             </div>
-          </div>
-          <Toaster />
+            <Toaster />
+          </NextAuthProvider>
         </Providers>
       </body>
     </html>

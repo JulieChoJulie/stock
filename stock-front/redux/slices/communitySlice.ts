@@ -1,33 +1,63 @@
-import { CreateCommunityPayload } from "@/lib/validators/community"
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import axios, { AxiosError } from "axios"
+import { setCommunityPayloadType } from "@/types/payloadTypes"
+import type { Post } from "@prisma/client"
 
 export type KnownError = {
   message: string
-  description: string
-  code: number | undefined
+  status: number | undefined
 }
 
 export interface communityState {
-  createdCommunity: string
-  loading: boolean
-  isSubscription: boolean
+  isLoading: boolean
+  isSubscribed: boolean | null
   memberCount: number
+  communityId: string
+  creatorId: string | null
+  communityName: string
+  posts: Post[]
   error: string | null
   status: number | null
 }
 
-export const postComunity = createAsyncThunk<
+export const subscribeCommunity = createAsyncThunk<
   string,
   string,
   { rejectValue: KnownError }
->("community/post", async (name, { rejectWithValue }) => {
+>("community/subscribe/post", async (communityId, { rejectWithValue }) => {
   try {
-    const payload: CreateCommunityPayload = {
-      name,
+    const payload: { communityId: string } = {
+      communityId,
     }
-    const response = await axios.post("/api/community", payload)
-    return response.data as string
+    const response = await axios.post("/api/community/subscribe", payload)
+    return response.data
+  } catch (err) {
+    const error: AxiosError<KnownError> = err as any
+    if (!error.response) {
+      throw err
+    }
+    console.log(error)
+    if (error.response.status) {
+      return rejectWithValue({
+        status: error.response.status,
+        message: error.response.data.message,
+      })
+    }
+    return rejectWithValue(error.response.data)
+  }
+})
+
+export const unsubscribeCommunity = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: KnownError }
+>("community/unsubscribe/post", async (communityId, { rejectWithValue }) => {
+  try {
+    const payload: { communityId: string } = {
+      communityId,
+    }
+    const response = await axios.post("/api/community/unsubscribe", payload)
+    return response.data
   } catch (err) {
     const error: AxiosError<KnownError> = err as any
     if (!error.response) {
@@ -35,9 +65,8 @@ export const postComunity = createAsyncThunk<
     }
     if (error.response.status) {
       return rejectWithValue({
-        code: error.response.status,
-        description: error.response.statusText,
-        message: "error",
+        status: error.response.status,
+        message: error.response.data.message,
       })
     }
     return rejectWithValue(error.response.data)
@@ -45,8 +74,13 @@ export const postComunity = createAsyncThunk<
 })
 
 const initialState = {
-  createdCommunity: "",
-  loading: false,
+  isLoading: false,
+  isSubscribed: null,
+  memberCount: 0,
+  communityId: "",
+  creatorId: null,
+  communityName: "",
+  posts: [],
   error: null,
   status: null,
 } as communityState
@@ -54,30 +88,63 @@ const initialState = {
 const communitySlice = createSlice({
   name: "community",
   initialState,
-  reducers: {},
+  reducers: {
+    setCommunity: (state, action: PayloadAction<setCommunityPayloadType>) => {
+      state.memberCount = action.payload.memberCount
+      state.isSubscribed = action.payload.isSubscribed
+      state.communityId = action.payload.communityId
+      state.posts = action.payload.posts
+      state.creatorId = action.payload.creatorId
+      state.communityName = action.payload.communityName
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(postComunity.fulfilled, (state, action) => {
-      state.loading = false
-      state.createdCommunity = action.payload
+    builder.addCase(subscribeCommunity.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSubscribed = true
+      state.memberCount += 1
       state.status = 200
     })
-    builder.addCase(postComunity.pending, (state) => {
-      state.loading = true
-      state.createdCommunity = ""
+    builder.addCase(subscribeCommunity.pending, (state) => {
+      state.isLoading = true
+
       state.error = null
     })
-    builder.addCase(postComunity.rejected, (state, action) => {
+    builder.addCase(subscribeCommunity.rejected, (state, action) => {
       console.log(action)
-      state.loading = false
-      if (action.payload && action.payload.code) {
-        state.status = action.payload.code
-        state.error = action.payload.description
+      state.isLoading = false
+      if (action.payload && action.payload.status) {
+        state.status = action.payload.status
+        state.error = action.payload.message
       } else {
-        state.error = action.error.message
+        state.error = "Could not subscribe community. Please try again later."
+        state.status = 500
+      }
+    })
+    builder.addCase(unsubscribeCommunity.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSubscribed = false
+      state.memberCount -= 1
+      state.status = 200
+    })
+    builder.addCase(unsubscribeCommunity.pending, (state) => {
+      state.isLoading = true
+      state.error = null
+    })
+    builder.addCase(unsubscribeCommunity.rejected, (state, action) => {
+      console.log(action)
+      state.isLoading = false
+      if (action.payload && action.payload.status) {
+        state.status = action.payload.status
+        state.error = action.payload.message
+      } else {
+        state.error = "Could not unsubscribe community. Please try again later."
         state.status = 500
       }
     })
   },
 })
+
+export const { setCommunity } = communitySlice.actions
 
 export default communitySlice.reducer

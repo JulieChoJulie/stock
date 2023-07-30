@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
-import communitySReducer from "@/redux/slices/communitySlice"
-import { communityApi } from "@/redux/services/community/communityApi"
+// import { communityApi } from "@/redux/services/community/communityApi"
+import communityReducer from "@/redux/slices/communitySlice"
 
 export const store = configureStore({
   reducer: {
-    community: communitySReducer,
-    [communityApi.reducerPath]: communityApi.reducer,
+    community: communityReducer,
+    // [communityApi.reducerPath]: communityApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(communityApi.middleware),
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware().concat(communityApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
