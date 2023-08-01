@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
-// import { communityApi } from "@/redux/services/community/communityApi"
 import communityReducer from "@/redux/slices/communitySlice"
+import { postApi } from "@/redux/services/post/postApi"
 
 export const store = configureStore({
   reducer: {
     community: communityReducer,
-    // [communityApi.reducerPath]: communityApi.reducer,
+    [postApi.reducerPath]: postApi.reducer,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(communityApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(postApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

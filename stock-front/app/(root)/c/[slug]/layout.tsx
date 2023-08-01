@@ -5,6 +5,8 @@ import { setCommunityPayloadType } from "@/types/payloadTypes"
 import Preloader from "@/components/community/Preloader"
 import CommunityInfo from "@/components/community/CommunityInfo"
 import format from "date-fns/format"
+import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 
 const layout = async ({
   children,
@@ -84,6 +86,17 @@ const layout = async ({
                   </dd>
                 </div>
                 <CommunityInfo />
+                {session?.user && (
+                  <Link
+                    className={buttonVariants({
+                      variant: "outline",
+                      className: "w-full mb-6",
+                    })}
+                    href={`/c/${slug}/submit`}
+                  >
+                    Create Post
+                  </Link>
+                )}
               </dl>
             </div>
           </div>
