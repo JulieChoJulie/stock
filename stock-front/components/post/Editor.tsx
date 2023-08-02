@@ -106,7 +106,6 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
     if (Object.keys(errors).length) {
       for (const [__key, value] of Object.entries(errors)) {
         toast({
-          title: "Something went wrong.",
           description: (value as { message: string }).message,
           variant: "destructive",
         })
@@ -163,7 +162,7 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       .catch((err) => {
         toast({
           description:
-            err?.data?.message ?? "Somethig went wrong.. Please try again.",
+            err?.data?.error ?? "Somethig went wrong.. Please try again.",
           variant: "destructive",
         })
       })

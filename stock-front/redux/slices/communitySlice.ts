@@ -36,7 +36,7 @@ export const subscribeCommunity = createAsyncThunk<
     if (!error.response) {
       throw err
     }
-    console.log(error)
+
     if (error.response.status) {
       return rejectWithValue({
         status: error.response.status,
@@ -111,7 +111,6 @@ const communitySlice = createSlice({
       state.error = null
     })
     builder.addCase(subscribeCommunity.rejected, (state, action) => {
-      console.log(action)
       state.isLoading = false
       if (action.payload && action.payload.status) {
         state.status = action.payload.status
@@ -132,7 +131,6 @@ const communitySlice = createSlice({
       state.error = null
     })
     builder.addCase(unsubscribeCommunity.rejected, (state, action) => {
-      console.log(action)
       state.isLoading = false
       if (action.payload && action.payload.status) {
         state.status = action.payload.status

@@ -1,6 +1,7 @@
 import Editor from "@/components/post/Editor"
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 
 interface pageProps {
@@ -27,24 +28,13 @@ const page = async ({ params }: pageProps) => {
             Create Post
           </h3>
           <p className="ml-2 mt-1 truncate text-sm text-gray-500">
-            in c/{params.slug}
+            <Link href={`/c/${params.slug}`}>in c/{params.slug}</Link>
           </p>
         </div>
       </div>
 
       {/* form */}
       <Editor communityId={community.id} />
-
-      <div className="w-full flex justify-end">
-        <Button
-          type="submit"
-          isLoading={false}
-          className="w-full"
-          form="community-post-form"
-        >
-          Post
-        </Button>
-      </div>
     </div>
   )
 }

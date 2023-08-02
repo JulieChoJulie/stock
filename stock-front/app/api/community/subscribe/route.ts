@@ -42,7 +42,6 @@ export async function POST(req: Request) {
     return new Response(communityId as string)
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("zod error:", err)
       return NextResponse.json({ message: err.message }, { status: 422 })
     }
     return NextResponse.json(

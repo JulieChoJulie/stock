@@ -16,7 +16,6 @@ const SubscribeToggle = () => {
     useSelector((state: RootState) => state.community)
 
   useEffect(() => {
-    console.log(error)
     if (error) {
       toast({
         title: "Unsuccessful",

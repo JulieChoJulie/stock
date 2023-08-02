@@ -16,7 +16,6 @@ const Page = () => {
     createCommunity(input)
       .unwrap()
       .then((payload) => {
-        console.log(payload)
         toast({
           title: "Successful!",
           description: `Community "${payload}" is created.`,

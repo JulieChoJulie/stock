@@ -31,7 +31,9 @@ const page = async ({ params }: PageProps) => {
   if (!community) return notFound()
   return (
     <>
-      <h1 className="font-bold text-xl md:text-2xl h-14">c/{community.name}</h1>
+      <h1 className="hidden md:block font-bold text-xl md:text-2xl h-14">
+        c/{community.name}
+      </h1>
       <CreatePost session={session} />
       {/* Show posts */}
     </>

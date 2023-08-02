@@ -2,11 +2,13 @@ import Link from "next/link"
 import { logoFont } from "@/lib/utils"
 import { getAuthSession } from "@/app/options"
 import { Icons } from "./Icons"
-import { buttonVariants } from "./ui/button"
+
 import UserAccountNav from "./UserAccountNav"
+import SignInButton from "./SignInButton"
 
 const Navbar = async () => {
   const session = await getAuthSession()
+
   return (
     <div className="fixed top-0 inset-x-0 h-fit z-[998] py-2 md:ml-18">
       <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
@@ -28,9 +30,7 @@ const Navbar = async () => {
         {session?.user ? (
           <UserAccountNav user={session.user} />
         ) : (
-          <Link href="/sign-in" className={buttonVariants()}>
-            Sign In
-          </Link>
+          <SignInButton />
         )}
       </div>
     </div>

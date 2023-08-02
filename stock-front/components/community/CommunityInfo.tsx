@@ -3,11 +3,13 @@
 import { useSession } from "next-auth/react"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
+import Link from "next/link"
 import SubscribeToggle from "./SubscribeToggle"
+import { buttonVariants } from "../ui/button"
 
 const CommunityInfo = () => {
   const { data: session } = useSession()
-  const { memberCount, creatorId } = useSelector(
+  const { memberCount, creatorId, isSubscribed, communityName } = useSelector(
     (state: RootState) => state.community,
   )
   return (
@@ -24,7 +26,20 @@ const CommunityInfo = () => {
           <p className="text-gray-500">You created this community</p>
         </div>
       )}
-      {creatorId !== session?.user.id ? <SubscribeToggle /> : null}
+      {session?.user && creatorId !== session?.user.id ? (
+        <SubscribeToggle />
+      ) : null}
+      {session?.user && isSubscribed && (
+        <Link
+          className={buttonVariants({
+            variant: "outline",
+            className: "w-full mb-6",
+          })}
+          href={`/c/${communityName}/submit`}
+        >
+          Create Post
+        </Link>
+      )}
     </>
   )
 }

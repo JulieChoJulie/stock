@@ -9,7 +9,10 @@ export async function POST(req: Request) {
     const session = await getAuthSession()
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json(
+        { error: "Please log in first." },
+        { status: 401 },
+      )
     }
 
     const body = await req.json()
@@ -39,13 +42,13 @@ export async function POST(req: Request) {
       },
     })
 
-    return new Response("OK")
+    return NextResponse.json({ status: 200 })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ message: error.message }, { status: 400 })
+      return NextResponse.json({ error: error.message }, { status: 400 })
     }
     return NextResponse.json(
-      { message: "Could not post to the community. Please try again later." },
+      { error: "Could not post to the community. Please try again later." },
       { status: 500 },
     )
   }

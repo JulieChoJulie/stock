@@ -22,7 +22,6 @@ export const postApi = createApi({
           body: {
             payload,
           },
-          responseHandler: (response) => response.text(),
         }
       },
     }),
