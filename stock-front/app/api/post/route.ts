@@ -13,9 +13,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
-
-    const { communityId, title, content } = PostValidator.parse(body.payload)
-
+    const { communityId, title, content } = PostValidator.parse(body)
     const subscriptionExists = await db.subscription.findFirst({
       where: {
         communityId,
@@ -41,7 +39,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ status: 200 })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 400 })
+      return new Response(error.message, { status: 422 })
     }
     return new Response(
       "Could not post to the community. Please try again later.",

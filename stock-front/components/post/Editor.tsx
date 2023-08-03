@@ -144,15 +144,25 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       communityId,
     }: PostCreationRequest) => {
       const payload: PostCreationRequest = { title, content, communityId }
-      const { data } = await axios.post("api/post", payload)
+      const { data } = await axios.post("/api/post", payload)
       return data
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
-        if (err.response?.data) {
+        if (err.response?.status) {
+          let description: string
+          if (err.response.status === 400) {
+            description = "Please subscribe the community first."
+          } else if (err.response.status === 401) {
+            description = "Please log in to publish a post."
+          } else if (err.response.status === 422) {
+            description = "Title should be between 3 and 128 characters."
+          } else {
+            description = "Something went wrong. Please try again."
+          }
           toast({
-            title: err.response?.data as string,
-            description: "Your post was not created. Please try again.",
+            title: "Your post was not published.",
+            description,
             variant: "destructive",
           })
         }
@@ -165,6 +175,14 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       }
     },
     onSuccess: () => {
+      toast({
+        title: "Successful!",
+        description: "Your post has been published.",
+      })
+
+      // re-fetch data for server component only.
+      router.refresh()
+
       // turn pathname /c/mycommunity/submit into /c/mycommunity
       const newPathname = pathname.split("/").slice(0, -1).join("/")
       router.push(newPathname)
