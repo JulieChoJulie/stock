@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import axios, { AxiosError } from "axios"
-import { setCommunityPayloadType } from "@/types/payloadTypes"
+import { setCommunityPayloadType } from "@/types/propTypes"
 import type { Post } from "@prisma/client"
 
 export type KnownError = {
@@ -93,7 +93,7 @@ const communitySlice = createSlice({
       state.memberCount = action.payload.memberCount
       state.isSubscribed = action.payload.isSubscribed
       state.communityId = action.payload.communityId
-      state.posts = action.payload.posts
+      // state.posts = action.payload.posts
       state.creatorId = action.payload.creatorId
       state.communityName = action.payload.communityName
     },

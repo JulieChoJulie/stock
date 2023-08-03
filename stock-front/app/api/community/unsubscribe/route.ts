@@ -1,7 +1,6 @@
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { CommunitySubscriptionValidator } from "@/lib/validators/community"
-import { NextResponse } from "next/server"
 import { z } from "zod"
 
 export async function POST(req: Request) {
@@ -9,10 +8,7 @@ export async function POST(req: Request) {
     const session = await getAuthSession()
 
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Please login first." },
-        { status: 401 },
-      )
+      return new Response("Please login first.", { status: 401 })
     }
 
     const body = await req.json()
@@ -27,10 +23,9 @@ export async function POST(req: Request) {
     })
 
     if (!subscriptionExists) {
-      return NextResponse.json(
-        { message: "You are not subscribed to this community." },
-        { status: 400 },
-      )
+      return new Response("You are not subscribed to this community.", {
+        status: 400,
+      })
     }
 
     // check if user is the owner of this community
@@ -42,10 +37,9 @@ export async function POST(req: Request) {
     })
 
     if (community) {
-      return NextResponse.json(
-        { message: "You cannot unsubscribed from your own community." },
-        { status: 400 },
-      )
+      return new Response("You cannot unsubscribed from your own community.", {
+        status: 400,
+      })
     }
 
     await db.subscription.delete({
@@ -57,11 +51,10 @@ export async function POST(req: Request) {
     return new Response()
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ message: err.message }, { status: 422 })
+      return new Response(err.message, { status: 422 })
     }
-    return NextResponse.json(
-      { message: "Could not unsubscribe. Please try again later." },
-      { status: 500 },
-    )
+    return new Response("Could not unsubscribe. Please try again later.", {
+      status: 500,
+    })
   }
 }

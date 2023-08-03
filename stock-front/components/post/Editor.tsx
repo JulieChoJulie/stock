@@ -8,7 +8,8 @@ import type EditorJS from "@editorjs/editorjs"
 import { PostCreationRequest, PostValidator } from "@/lib/validators/post"
 import { toast } from "@/hooks/use-toast"
 import { usePathname, useRouter } from "next/navigation"
-import { useCreatePostMutation } from "@/redux/services/post/postApi"
+import { useMutation } from "@tanstack/react-query"
+import axios, { AxiosError } from "axios"
 import { Button } from "../ui/button"
 
 interface EditorProps {
@@ -136,7 +137,43 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
 
   const { ref: titleRef, ...rest } = register("title")
 
-  const [createPost, { isLoading }] = useCreatePostMutation()
+  const { mutate: createPost, isLoading } = useMutation({
+    mutationFn: async ({
+      title,
+      content,
+      communityId,
+    }: PostCreationRequest) => {
+      const payload: PostCreationRequest = { title, content, communityId }
+      const { data } = await axios.post("api/post", payload)
+      return data
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.data) {
+          toast({
+            title: err.response?.data as string,
+            description: "Your post was not created. Please try again.",
+            variant: "destructive",
+          })
+        }
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "Your post was not created. Please try again.",
+          variant: "destructive",
+        })
+      }
+    },
+    onSuccess: () => {
+      // turn pathname /c/mycommunity/submit into /c/mycommunity
+      const newPathname = pathname.split("/").slice(0, -1).join("/")
+      router.push(newPathname)
+
+      // re-fetch data on server side without changing browser state and
+      // client component
+      router.refresh()
+    },
+  })
 
   const onSubmit = async (data: PostCreationRequest) => {
     const blocks = await ref.current?.save()
@@ -146,26 +183,7 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       content: blocks,
       communityId,
     }
-
     createPost(payload)
-      .unwrap()
-      .then(() => {
-        const newPathname = pathname.split("/").slice(0, -1).join("/")
-        router.push(newPathname)
-        router.refresh()
-
-        toast({
-          title: "Successful",
-          description: "Your post has been published.",
-        })
-      })
-      .catch((err) => {
-        toast({
-          description:
-            err?.data?.error ?? "Somethig went wrong.. Please try again.",
-          variant: "destructive",
-        })
-      })
   }
 
   if (!isMounted) {

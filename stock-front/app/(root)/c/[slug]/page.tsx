@@ -1,5 +1,6 @@
 import { getAuthSession } from "@/app/options"
 import CreatePost from "@/components/post/CreatePost"
+import PostFeed from "@/components/post/PostFeed"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
 import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
@@ -36,6 +37,7 @@ const page = async ({ params }: PageProps) => {
       </h1>
       <CreatePost session={session} />
       {/* Show posts */}
+      <PostFeed initialPosts={community.posts} communityName={community.name} />
     </>
   )
 }

@@ -9,10 +9,7 @@ export async function POST(req: Request) {
     const session = await getAuthSession()
 
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Please login first." },
-        { status: 401 },
-      )
+      return new Response("Please login first.", { status: 401 })
     }
 
     const body = await req.json()
@@ -24,8 +21,7 @@ export async function POST(req: Request) {
 
     if (communityExists) {
       const message: string = `Community "${name}" already exists`
-
-      return NextResponse.json({ message }, { status: 409 })
+      return new Response(message, { status: 409 })
     }
 
     const community = await db.community.create({
@@ -47,9 +43,9 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       const message: string =
         "Please choose a name between 3 and 20 characters."
-      return NextResponse.json({ message }, { status: 422 })
+      return new Response(message, { status: 422 })
     }
     const message: string = "Could not create a community. Try again later."
-    return NextResponse.json({ message }, { status: 500 })
+    return new Response(message, { status: 500 })
   }
 }

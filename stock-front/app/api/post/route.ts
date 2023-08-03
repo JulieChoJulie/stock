@@ -9,10 +9,7 @@ export async function POST(req: Request) {
     const session = await getAuthSession()
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "Please log in first." },
-        { status: 401 },
-      )
+      return new Response("Please log in first.", { status: 401 })
     }
 
     const body = await req.json()
@@ -27,10 +24,9 @@ export async function POST(req: Request) {
     })
 
     if (!subscriptionExists) {
-      return NextResponse.json(
-        { error: "Please subscribe the community first." },
-        { status: 400 },
-      )
+      return new Response("Please subscribe the community first.", {
+        status: 400,
+      })
     }
 
     await db.post.create({
@@ -45,10 +41,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ status: 200 })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
+      return new Response(error.message, { status: 400 })
     }
-    return NextResponse.json(
-      { error: "Could not post to the community. Please try again later." },
+    return new Response(
+      "Could not post to the community. Please try again later.",
       { status: 500 },
     )
   }

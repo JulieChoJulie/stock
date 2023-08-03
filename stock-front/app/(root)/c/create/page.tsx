@@ -3,39 +3,54 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
-import { useCreateCommunityMutation } from "@/redux/services/community/communityApi"
+import { CreateCommunityPayload } from "@/lib/validators/community"
+import { useMutation } from "@tanstack/react-query"
+import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 
 const Page = () => {
   const [input, setInput] = useState<string>("")
   const router = useRouter()
-  const [createCommunity, { error, isLoading }] = useCreateCommunityMutation()
 
-  const createdCommunity = useCallback(() => {
-    createCommunity(input)
-      .unwrap()
-      .then((payload) => {
-        toast({
-          title: "Successful!",
-          description: `Community "${payload}" is created.`,
-        })
-        router.push(`/c/${payload}`)
-      })
-      .catch((err) => {
-        const { status } = err
-        if (status === 401) {
-          router.push("/sign-in?callbackUrl=%2Fc%2Fcreate")
-        } else if (status !== 409 && status !== 422) {
+  const {
+    mutate: createCommunity,
+    isLoading,
+    error,
+  } = useMutation({
+    mutationFn: async () => {
+      const payload: CreateCommunityPayload = {
+        name: input,
+      }
+
+      const { data } = await axios.post("/api/community", payload)
+      return data as string
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.data) {
           toast({
-            title: "Internal Error",
-            description: "Could not create a community. Please try later.",
+            title: err.response?.data as string,
+            description: "Your post was not created. Please try again.",
             variant: "destructive",
           })
         }
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "Your post was not created. Please try again.",
+          variant: "destructive",
+        })
+      }
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Successful!",
+        description: `Community ${data} is now created.`,
       })
-    setInput("")
-  }, [createCommunity, input, router])
+      router.push(`/c/${data}`)
+    },
+  })
 
   return (
     <div className="container flex items-center justify-center h-full max-w-3xl mx-auto pb-16">
@@ -61,8 +76,8 @@ const Page = () => {
           </div>
         </div>
 
-        {error?.data && error?.data?.message && (
-          <div className="text-red-600">{error.data.message}</div>
+        {error?.response && error?.response?.data && (
+          <div className="text-red-600">{error.response.data}</div>
         )}
         <div className="flex justify-end gap-4">
           <Button
@@ -75,7 +90,7 @@ const Page = () => {
           <Button
             isLoading={isLoading}
             disabled={input.length < 3}
-            onClick={() => createdCommunity()}
+            onClick={() => createCommunity()}
           >
             Create Community
           </Button>
