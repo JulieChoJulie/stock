@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-family: var(--font-inter);
+}
+
 html,
 body,
 :root {
