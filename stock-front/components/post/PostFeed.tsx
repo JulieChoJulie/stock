@@ -3,7 +3,6 @@
 import { ExtendedPost } from "@/types/db"
 import { FC, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
-import { useGetPostByNameQuery } from "@/redux/services/post/postApi"
 import Post from "./Post"
 
 interface PostFeedProps {
@@ -13,41 +12,9 @@ interface PostFeedProps {
 
 const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
   const [page, setPage] = useState(0)
-  //   const { data, isFetching, error } = useGetPostByNameQuery({
-  //     page,
-  //     communityName,
-  //   })
-  //   const posts: ExtendedPost[] = data?.results ?? initialPosts
-  const posts: ExtendedPost[] = initialPosts ?? []
+  const data = []
+  const posts: ExtendedPost[] = data?.results ?? initialPosts
   const { data: session } = useSession()
-
-  //   useEffect(() => {
-  //     const onScroll = () => {
-  //       const scrolledToB =
-  //         window.scrollY + document.documentElement.clientHeight ===
-  //         document.documentElement.scrollHeight - 388
-  //       const scrolledToBottom =
-  //         window.innerHeight + window.scrollY >= document.body.offsetHeight
-  //       if (scrolledToBottom && !isFetching) {
-  //         console.log("Fetching more data...")
-  //         console.log("page: ", page)
-  //         setPage((prev) => prev + 1)
-  //         console.log("page: ", page)
-  //         if (error) {
-  //           setPage(page - 1)
-  //           console.log("*************error***********")
-  //           console.log("page: ", page)
-  //           console.log("error: ", error)
-  //         }
-  //       }
-  //     }
-
-  //     document.addEventListener("scroll", onScroll)
-
-  //     return () => {
-  //       document.removeEventListener("scroll", onScroll)
-  //     }
-  //   }, [page, isFetching, error])
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
