@@ -5,7 +5,7 @@ import {
 } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -14,6 +14,25 @@ const s3 = new S3Client({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 })
+
+export const getNewUrl = async (key: string) => {
+  const imageUrl = await getSignedUrl(
+    s3,
+    new GetObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    }),
+    { expiresIn: 120 }, // 120 seconds
+  )
+
+  return imageUrl
+}
+
+export async function GET(req: NextRequest) {
+  const key = req.nextUrl.searchParams.get("key") as string
+  const imageUrl = await getNewUrl(key)
+  return NextResponse.json({ url: imageUrl })
+}
 
 export async function POST(req: Request) {
   const formData = await req.formData()

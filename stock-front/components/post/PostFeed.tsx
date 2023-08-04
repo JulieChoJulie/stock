@@ -21,26 +21,27 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
     root: lastPostRef.current,
     threshold: 1,
   })
-  // const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-  //   ["infinite-query"],
-  //   async ({ pageParam = 1 }) => {
-  //     const query = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}${
-  //       communityName ? `&communityName=${communityName}` : ""
-  //     }`
-  //     const { data } = await axios.get(query)
-  //     return data as ExtendedPost[]
-  //   },
-  //   {
-  //     getNextPageParam: (_, pages) => {
-  //       return pages.length + 1
-  //     },
-  //     initialData: { pages: [initialPosts], pageParams: [1] },
-  //   },
-  // )
+  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ["infinite-query"],
+    async ({ pageParam = 1 }) => {
+      const query = `/api/posts?limit=${
+        INFINITE_SCROLLING_PAGINATION_RESULTS * 2
+      }&page=${pageParam}${
+        communityName ? `&communityName=${communityName}` : ""
+      }`
+      const { data } = await axios.get(query)
+      return data as ExtendedPost[]
+    },
+    {
+      getNextPageParam: (_, pages) => {
+        return pages.length + 1
+      },
+      initialData: { pages: [initialPosts], pageParams: [1] },
+    },
+  )
 
-  const posts: ExtendedPost[] = initialPosts
-  // const posts: ExtendedPost[] =
-  //   data?.pages.flatMap((page) => page) ?? initialPosts
+  const posts: ExtendedPost[] =
+    data?.pages.flatMap((page) => page) ?? initialPosts
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">

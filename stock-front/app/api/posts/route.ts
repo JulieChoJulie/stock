@@ -1,7 +1,9 @@
-// import { db } from "@/lib/db"
-// import { z } from "zod"
-// import { NextResponse } from "next/server"
-// import { getAuthSession } from "@/app/options"
+import { db } from "@/lib/db"
+import { z } from "zod"
+import { NextResponse, NextRequest } from "next/server"
+import { getAuthSession } from "@/app/options"
+import axios from "axios"
+import { getNewUrl } from "../image/route"
 
 // export async function GET(req: Request) {
 //   const url = new URL(req.url)
@@ -95,3 +97,56 @@
 //     )
 //   }
 // }
+
+export const getPostsWithNewUrl = async (posts) => {
+  return await Promise.all(
+    posts.map(async (post) => {
+      await Promise.all(
+        post.content?.blocks.map(async (block) => {
+          if ("file" in block.data && "url" in block.data.file) {
+            const { url } = block.data.file
+            const key = url.split("?")[0].split(`amazonaws.com/`)[1]
+            const src = await getNewUrl(key)
+            block.data.file.url = src
+            console.log("src: ", src)
+          }
+          return block
+        }),
+      )
+      return post
+    }),
+  )
+}
+
+export async function GET(req: NextRequest) {
+  const communityName =
+    (req.nextUrl.searchParams.get("communityName") as string) ?? ""
+  const limitParam: string | null = req.nextUrl.searchParams.get("limit")
+
+  let limit: number
+  if (limitParam) {
+    // not null
+    limit = parseInt(limitParam, 10) as number
+  } else {
+    limit = 2
+  }
+
+  const posts = await db.post.findMany({
+    take: limit,
+    where: {
+      community: {
+        name: communityName,
+      },
+    },
+    include: {
+      community: true,
+      votes: true,
+      author: true,
+      comments: true,
+    },
+  })
+
+  const postsWithUrl = await getPostsWithNewUrl(posts)
+
+  return new Response(JSON.stringify(postsWithUrl))
+}

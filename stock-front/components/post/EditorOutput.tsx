@@ -3,6 +3,7 @@
 import { FC } from "react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
+import axios from "axios"
 
 const Output = dynamic(
   async () => (await import("editorjs-react-renderer")).default,
@@ -13,12 +14,18 @@ interface EditorOutputProps {
   content: any
 }
 
-function CustomImageRenderer({ data }: any) {
-  const src = data.file.url
+async function CustomImageRenderer({ data }: any) {
+  const src = data.file.url as string
 
   return (
-    <div className="relative w-full min-h-[15rem]">
-      <Image alt="image" className="object-contain" fill src={src} />
+    <div className="relative w-full min-h-[15rem] overflow-hidden">
+      <Image
+        alt="image in post"
+        fill
+        className="object-contain"
+        src={src}
+        loading="lazy"
+      />
     </div>
   )
 }

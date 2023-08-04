@@ -2,7 +2,9 @@ import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { z } from "zod"
 import { CommunityValidator } from "@/lib/validators/community"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
+import { getPostsWithNewUrl } from "../posts/route"
 
 export async function POST(req: Request) {
   try {
@@ -46,6 +48,48 @@ export async function POST(req: Request) {
       return new Response(message, { status: 422 })
     }
     const message: string = "Could not create a community. Try again later."
+    return new Response(message, { status: 500 })
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const name = (req.nextUrl.searchParams.get("communityName") as string) ?? ""
+    const postLimitParam =
+      (req.nextUrl.searchParams.get("postLimit") as string) ?? ""
+
+    let postLimit: number
+    if (postLimitParam) {
+      postLimit = parseInt(postLimitParam, 10) as number
+    } else {
+      postLimit = INFINITE_SCROLLING_PAGINATION_RESULTS as number
+    }
+    const community = await db.community.findFirst({
+      where: { name },
+      include: {
+        posts: {
+          include: {
+            author: true,
+            votes: true,
+            comments: true,
+            community: true,
+          },
+          take: postLimit,
+        },
+      },
+    })
+
+    if (!community) {
+      return new Response(null, { status: 404 })
+    }
+
+    // update signed image url
+    const postsWithNewUrl = await getPostsWithNewUrl(community?.posts)
+    community.posts = postsWithNewUrl
+
+    return NextResponse.json({ community }, { status: 200 })
+  } catch (err) {
+    const message: string = "Somethign went wrong. Please try again."
     return new Response(message, { status: 500 })
   }
 }

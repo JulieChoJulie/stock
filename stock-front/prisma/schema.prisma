@@ -39,10 +39,10 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id               String      @id @default(cuid())
+  name             String?
+  email            String?     @unique
+  emailVerified    DateTime?
   createdCommunity Community[] @relation("CreatedBy")
 
   username String? @unique
@@ -96,6 +96,14 @@ model Post {
 
   comments Comment[]
   votes    Vote[]
+  images   Image[]
+}
+
+model Image {
+  id     String @id
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+  url    String
 }
 
 model Comment {
