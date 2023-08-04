@@ -41,7 +41,6 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
     const Embed = (await import("@editorjs/embed")).default
     const Table = (await import("@editorjs/table")).default
     const List = (await import("@editorjs/list")).default
-    const Code = (await import("@editorjs/code")).default
     const LinkTool = (await import("@editorjs/link")).default
     const InlineCode = (await import("@editorjs/inline-code")).default
     const ImageTool = (await import("@editorjs/image")).default
@@ -88,7 +87,6 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
             },
           },
           list: List,
-          code: Code,
           inlineCode: InlineCode,
           table: Table,
           embed: Embed,
@@ -234,7 +232,8 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
               }}
               {...rest}
               placeholder="title"
-              className="w-ful resize-none appearance-none overlfow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+              className="w-full resize-none appearance-none overlfow-hidden bg-transparent text-2xl 
+              font-bold focus:outline-none overflow-hidden"
             />
 
             <div id="editor" className="min-h-[500px]" />

@@ -24,7 +24,7 @@ const page = async ({ params }: PageProps) => {
           comments: true,
           community: true,
         },
-        take: INFINITE_SCROLLING_PAGINATION_RESULTS,
+        take: 100,
       },
     },
   })

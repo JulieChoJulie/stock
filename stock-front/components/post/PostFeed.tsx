@@ -1,8 +1,12 @@
 "use client"
 
 import { ExtendedPost } from "@/types/db"
-import { FC, useEffect, useState } from "react"
+import { FC, useRef } from "react"
 import { useSession } from "next-auth/react"
+import { useIntersection } from "@mantine/hooks"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
+import axios from "axios"
 import Post from "./Post"
 
 interface PostFeedProps {
@@ -11,10 +15,32 @@ interface PostFeedProps {
 }
 
 const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
-  const [page, setPage] = useState(0)
-  const data = []
-  const posts: ExtendedPost[] = data?.results ?? initialPosts
   const { data: session } = useSession()
+  const lastPostRef = useRef<HTMLElement>(null)
+  const { ref, entry } = useIntersection({
+    root: lastPostRef.current,
+    threshold: 1,
+  })
+  // const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+  //   ["infinite-query"],
+  //   async ({ pageParam = 1 }) => {
+  //     const query = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}${
+  //       communityName ? `&communityName=${communityName}` : ""
+  //     }`
+  //     const { data } = await axios.get(query)
+  //     return data as ExtendedPost[]
+  //   },
+  //   {
+  //     getNextPageParam: (_, pages) => {
+  //       return pages.length + 1
+  //     },
+  //     initialData: { pages: [initialPosts], pageParams: [1] },
+  //   },
+  // )
+
+  const posts: ExtendedPost[] = initialPosts
+  // const posts: ExtendedPost[] =
+  //   data?.pages.flatMap((page) => page) ?? initialPosts
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
@@ -29,22 +55,21 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
           (vote) => vote.userId === session?.user.id,
         )
 
+        const commentAmt: number = 5
+
+        // attach ref to the last fetched post for inifite scrolling
+        if (index === posts.length - 1) {
+          return (
+            <li key={post.id} ref={ref}>
+              <Post communityName="111" post={post} commentAmt={commentAmt} />
+            </li>
+          )
+        }
         return (
-          <li className="h-[50rem] py-30 bg-slate-300" key={post.id}>
-            <div className="py-[10rem]">{post.title}</div>
+          <li key={post.id}>
+            <Post communityName="111" post={post} commentAmt={commentAmt} />
           </li>
         )
-
-        // return (
-        //   <Post
-        //     key={post.id}
-        //     post={post}
-        //     commentAmt={post.comments.length}
-        //     subredditName={post.subreddit.name}
-        //     votesAmt={votesAmt}
-        //     currentVote={currentVote}
-        //   />
-        // )
       })}
     </ul>
   )
