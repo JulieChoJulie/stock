@@ -2,6 +2,7 @@ import { FC, useRef } from "react"
 import { ExtendedPost } from "@/types/db"
 import { MessageSquare } from "lucide-react"
 import EditorOutput from "./EditorOutput"
+import PostVoteClient from "./vote/PostVoteClient"
 
 interface PostProps {
   communityName: string
@@ -48,7 +49,12 @@ const Post: FC<PostProps> = ({ communityName, post, commentAmt }) => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6">
+      <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6 flex justify-between">
+        <PostVoteClient
+          postId={post.id}
+          initialVotesAmt={2}
+          initialVote={null}
+        />
         <a
           className="w-fit flex items-center gap-2"
           href={`/c/${communityName}/post/${post.id}`}

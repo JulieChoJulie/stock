@@ -94,7 +94,7 @@ const Sidebar = () => {
         // initial={{ x: !isTab ? -250 : 0 }}
         animate={isOpen ? "open" : "closed"}
         className={`fixed h-screen bg-white text-gray z-[998] w-[16rem] 
-        max-w-[16rem] p-3 pt-12
+        max-w-[16rem] p-3 pt-14
         ${isMenuModalOpen && "shadow-xl  z-[999]"}
     `}
       >
