@@ -1,9 +1,9 @@
-import { getAuthSession } from "@/app/options"
-import { db } from "@/lib/db"
 import format from "date-fns/format"
 import { notFound } from "next/navigation"
-import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
+import { getAuthSession } from "@/app/options"
+import { db } from "@/lib/db"
+import { buttonVariants } from "@/components/ui/button"
 import { CommunityPropType } from "@/types/propTypes"
 import SubscribeToggle from "@/components/community/SubscribeToggle"
 
@@ -17,14 +17,17 @@ const layout = async ({
   const session = await getAuthSession()
   const community = await db.community.findFirst({
     where: { name: slug },
-    include: {
-      posts: {
-        include: {
-          author: true,
-          votes: true,
-        },
-      },
-    },
+    // include: {
+    //   posts: {
+    //     orderBy: {
+    //       createdAt: "desc",
+    //     },
+    //     include: {
+    //       author: true,
+    //       votes: true,
+    //     },
+    //   },
+    // },
   })
 
   const subscription = !session?.user

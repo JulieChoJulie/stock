@@ -34,7 +34,7 @@ export default function RootLayout({
             {/* ts expect error for ServerComponent */}
             <Navbar />
             {authModal}
-            <div className="container h-full max-w-7xl mx-auto pt-16">
+            <div className="container h-full max-w-7xl mx-auto pt-20 ml-12">
               {children}
             </div>
           </div>

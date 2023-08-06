@@ -1,17 +1,16 @@
 "use client"
 
-import { usePrevious } from "@mantine/hooks"
 import { FC, useEffect, useState } from "react"
 import { VoteType } from "@prisma/client"
-import { PostVoteRequest } from "@/lib/validators/vote"
 import axios, { AxiosError } from "axios"
+import { ThumbsDown, ThumbsUp } from "lucide-react"
+import { useMutation } from "@tanstack/react-query"
+import { usePathname } from "next/navigation"
+import { PostVoteRequest } from "@/lib/validators/vote"
 import { useCustomToast } from "@/hooks/use-custom-toast"
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ThumbsDown, ThumbsUp } from "lucide-react"
-import { useMutation } from "@tanstack/react-query"
-import { usePathname } from "next/navigation"
 import { homepageUrl } from "@/lib"
 
 interface PostVoteClientProps {
@@ -27,7 +26,8 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
 }) => {
   const [votesAmt, setVotesAmt] = useState<number>(initialVotesAmt)
   const [currentVote, setCurrentVote] = useState(initialVote)
-  const prevVote = usePrevious(undefined)
+  const [prevVote, setPrevVote] = useState<VoteType | null>(null)
+
   const pathname = usePathname()
   // toast with login link including callbackUrl of pathname
   const { loginToast } = useCustomToast(`${homepageUrl}${pathname}`)
@@ -49,7 +49,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       // only count 'UP' for vote amount
       if (currentVote === type) {
         // remove their vote
-        setCurrentVote(undefined)
+        setCurrentVote(null)
 
         if (type === "UP") setVotesAmt((prev) => prev - 1)
       } else {
@@ -59,6 +59,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         }
         setCurrentVote(type)
       }
+      setPrevVote(currentVote)
     },
     onError: (err, voteType) => {
       // restore vote count
@@ -66,15 +67,14 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         // fail to remove their vote
         if (voteType === "UP") setVotesAmt((prev) => prev + 1)
       } else {
-        console.log("votetype", voteType)
         if (voteType === "UP") setVotesAmt((prev) => prev - 1)
         if (voteType === "DOWN" && prevVote === "UP")
           setVotesAmt((prev) => prev + 1)
       }
 
       setCurrentVote(prevVote)
+      setPrevVote(null)
 
-      console.log("err: ", err)
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
           return loginToast()

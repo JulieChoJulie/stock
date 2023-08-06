@@ -1,17 +1,18 @@
 "use client"
 
-import { ExtendedPost } from "@/types/db"
-import { FC, useRef } from "react"
+import { FC, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useIntersection } from "@mantine/hooks"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
 import axios from "axios"
+import { Loader2 } from "lucide-react"
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
+import { ExtendedPost } from "@/types/db"
 import Post from "./Post"
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[]
-  communityName: string
+  communityName?: string
 }
 
 const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
@@ -21,27 +22,56 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
     root: lastPostRef.current,
     threshold: 1,
   })
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["infinite-query"],
-    async ({ pageParam = 1 }) => {
-      const query = `/api/posts?limit=${
-        INFINITE_SCROLLING_PAGINATION_RESULTS * 2
-      }&page=${pageParam}${
-        communityName ? `&communityName=${communityName}` : ""
-      }`
-      const { data } = await axios.get(query)
-      return data as ExtendedPost[]
-    },
-    {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery(
+      ["infinite-query"],
+      async ({ pageParam = 1 }) => {
+        const query = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}${
+          communityName ? `&communityName=${communityName}` : ""
+        }`
+        const { data } = await axios.get(query)
+        return data as ExtendedPost[]
       },
-      initialData: { pages: [initialPosts], pageParams: [1] },
-    },
-  )
+      {
+        getNextPageParam: (_, pages) => {
+          const lastPage = pages[pages.length - 1]
+          if (lastPage.length === 0) {
+            return undefined
+          }
+
+          return pages.length + 1
+
+          // const lastRecord = lastPage
+
+          // if (lastPage.length === 0) {
+          //   return undefined // determine hasNextPage=false
+          // }
+
+          // // determine hasNextPage=false if the last page contains no post.
+          // if (
+          //   Array.isArray(pages) &&
+          //   pages.length > 0 &&
+          //   pages[pages.length - 1].length === 0
+          // ) {
+          //   return undefined
+          // }
+
+          // // hasNextpage=true
+          // return pages.length + 1
+        },
+        initialData: { pages: [initialPosts], pageParams: [1] },
+      },
+    )
 
   const posts: ExtendedPost[] =
     data?.pages.flatMap((page) => page) ?? initialPosts
+
+  useEffect(() => {
+    // load more posts when the last post comes into view
+    if (!isFetchingNextPage && hasNextPage && entry?.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [entry, fetchNextPage, isFetchingNextPage, hasNextPage])
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
@@ -56,22 +86,34 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
           (vote) => vote.userId === session?.user.id,
         )
 
-        const commentAmt: number = 5
-
         // attach ref to the last fetched post for inifite scrolling
         if (index === posts.length - 1) {
           return (
             <li key={post.id} ref={ref}>
-              <Post communityName="111" post={post} commentAmt={commentAmt} />
+              <Post
+                communityName={communityName ?? post.community.name}
+                commentAmt={post.comments.length}
+                post={post}
+              />
             </li>
           )
         }
         return (
           <li key={post.id}>
-            <Post communityName="111" post={post} commentAmt={commentAmt} />
+            <Post
+              commentAmt={post.comments.length}
+              communityName={communityName ?? post.community.name}
+              post={post}
+            />
           </li>
         )
       })}
+
+      {isFetchingNextPage && hasNextPage && (
+        <li className="flex justify-center">
+          <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
+        </li>
+      )}
     </ul>
   )
 }

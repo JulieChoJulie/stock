@@ -1,11 +1,11 @@
+import axios from "axios"
+import { notFound } from "next/navigation"
 import { getAuthSession } from "@/app/options"
 import CreatePost from "@/components/post/CreatePost"
 import PostFeed from "@/components/post/PostFeed"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
 import { homepageUrl } from "@/lib"
 import { db } from "@/lib/db"
-import axios from "axios"
-import { notFound } from "next/navigation"
 
 interface PageProps {
   params: {
@@ -17,7 +17,7 @@ const page = async ({ params }: PageProps) => {
   const { slug } = params
   const session = await getAuthSession()
   const res = await axios.get(
-    `${homepageUrl}/api/community?communityName=${slug}&postLimit=${4}`,
+    `${homepageUrl}/api/community?communityName=${slug}&postLimit=${INFINITE_SCROLLING_PAGINATION_RESULTS}`,
   )
   const community = res.data.community ?? null
 

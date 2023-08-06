@@ -1,11 +1,11 @@
 import { FC, useRef } from "react"
-import { ExtendedPost } from "@/types/db"
 import { MessageSquare } from "lucide-react"
+import { ExtendedPost } from "@/types/db"
 import EditorOutput from "./EditorOutput"
 import PostVoteClient from "./vote/PostVoteClient"
 
 interface PostProps {
-  communityName: string
+  communityName: string | undefined
   post: ExtendedPost
   commentAmt: number
 }
@@ -49,7 +49,7 @@ const Post: FC<PostProps> = ({ communityName, post, commentAmt }) => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6 flex justify-between">
+      <div className="bg-gray-50 z-20 text-sm p-2 sm:px-6 flex justify-between">
         <PostVoteClient
           postId={post.id}
           initialVotesAmt={2}

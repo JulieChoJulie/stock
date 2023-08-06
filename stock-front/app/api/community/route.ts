@@ -1,8 +1,8 @@
+import { z } from "zod"
+import { NextResponse } from "next/server"
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
-import { z } from "zod"
 import { CommunityValidator } from "@/lib/validators/community"
-import { NextRequest, NextResponse } from "next/server"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
 import { getPostsWithNewUrl } from "../posts/route"
 
@@ -68,6 +68,9 @@ export async function GET(req: NextRequest) {
       where: { name },
       include: {
         posts: {
+          orderBy: {
+            createdAt: "desc",
+          },
           include: {
             author: true,
             votes: true,
