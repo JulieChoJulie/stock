@@ -8,11 +8,11 @@ import axios from "axios"
 import { Loader2 } from "lucide-react"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
 import { ExtendedPost } from "@/types/db"
-import Post from "./Post"
+import Post from "../post/Post"
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[]
-  communityName: string
+  communityName?: string
 }
 
 const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
@@ -22,6 +22,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
     root: lastPostRef.current,
     threshold: 1,
   })
+
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       ["infinite-query"],

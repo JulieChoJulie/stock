@@ -50,12 +50,12 @@ export async function GET(req: NextRequest) {
       .object({
         limit: z.string(),
         page: z.string(),
-        comunityName: z.string().nullish().optional(),
+        communityName: z.string().nullish().optional(),
       })
       .parse({
-        communityName: url.searchParams.get("communityName"),
         limit: url.searchParams.get("limit"),
         page: url.searchParams.get("page"),
+        communityName: url.searchParams.get("communityName"),
       })
 
     let whereClause = {}
