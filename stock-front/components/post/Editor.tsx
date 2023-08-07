@@ -5,11 +5,11 @@ import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import TextareaAutosize from "react-textarea-autosize"
 import type EditorJS from "@editorjs/editorjs"
-import { PostCreationRequest, PostValidator } from "@/lib/validators/post"
-import { toast } from "@/hooks/use-toast"
 import { usePathname, useRouter } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
+import { toast } from "@/hooks/use-toast"
+import { PostCreationRequest, PostValidator } from "@/lib/validators/post"
 import { Button } from "../ui/button"
 
 interface EditorProps {
@@ -173,14 +173,6 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       }
     },
     onSuccess: () => {
-      toast({
-        title: "Successful!",
-        description: "Your post has been published.",
-      })
-
-      // re-fetch data for server component only.
-      router.refresh()
-
       // turn pathname /c/mycommunity/submit into /c/mycommunity
       const newPathname = pathname.split("/").slice(0, -1).join("/")
       router.push(newPathname)
@@ -188,6 +180,11 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
       // re-fetch data on server side without changing browser state and
       // client component
       router.refresh()
+
+      toast({
+        title: "Successful!",
+        description: "Your post has been published.",
+      })
     },
   })
 

@@ -1,69 +1,77 @@
-import { FC, useRef } from "react"
+"use client"
+
+import { Post, User, Vote } from "@prisma/client"
 import { MessageSquare } from "lucide-react"
-import { ExtendedPost } from "@/types/db"
-import EditorOutput from "./EditorOutput"
+import Link from "next/link"
+import { FC } from "react"
+import { formatTimeToNow } from "@/lib/utils"
 import PostVoteClient from "./vote/PostVoteClient"
+import PostPreview from "./PostPreview"
+
+type PartialVote = Pick<Vote, "type">
 
 interface PostProps {
-  communityName: string | undefined
-  post: ExtendedPost
+  post: Post & {
+    author: User
+    votes: Vote[]
+  }
+  votesAmt: number
+  communityName: string
+  currentVote?: PartialVote
   commentAmt: number
 }
 
-const Post: FC<PostProps> = ({ communityName, post, commentAmt }) => {
-  // to dynamically track its height
-  const postRef = useRef<HTMLElement>(null)
-
+const Post: FC<PostProps> = ({
+  post,
+  votesAmt: _votesAmt,
+  communityName,
+  commentAmt,
+  currentVote: _currentVote,
+}) => {
   return (
-    <div className="border rounded border-slate-200">
+    <div className="rounded-md bg-white shadow">
       <div className="px-6 py-4 flex justify-between">
-        {/* post votes */}
-
-        {/* preview component for each post */}
         <div className="w-0 flex-1">
-          <div className="max-h-40 my-1 text-xs text-gray-500">
+          <div className="max-h-30 mt-1 text-xs text-gray-500">
             {communityName ? (
               <>
-                {/* hard reloading using a tag */}
-                <a className="underline" href={`/c/${communityName}`}>
+                <a
+                  className="
+                  hover:font-semibold
+                  underline text-zinc-900 text-sm underline-offset-2"
+                  href={`/c/${communityName}`}
+                >
                   c/{communityName}
                 </a>
-                <span className="px-1">*</span>
+                <span className="px-1">•</span>
               </>
             ) : null}
-            <span className="px=1">Posted by @${post.author.username} </span>
-            {/* {formatTimeToNow(new Date(post.createdAt))} */}
+            <span>Posted by @{post.author.username}</span>{" "}
+            {formatTimeToNow(new Date(post.createdAt))}
           </div>
-          {/* hard refresh to fetch comments together */}
-          <a href={`/c/${communityName}/post/{post.id}`}>
-            <h1 className="text-md font-semibold py-2 leading-6 text-gray-800">
+          <a href={`/c/${communityName}/post/${post.id}`}>
+            <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
               {post.title}
             </h1>
+            <PostPreview content={post.content} />
           </a>
-          {/* if the preview is longer than 160px, cut it and blur the bottom edge */}
-          <div className="relative text-sm max-h-40 w-full overflow-clip ref={postRef}">
-            <EditorOutput content={post.content} />
-            {postRef.current?.clientHeight === 160 ? (
-              <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent'" />
-            ) : null}
-          </div>
         </div>
       </div>
-      <div className="bg-gray-50 z-20 text-sm p-2 sm:px-6 flex justify-between">
+
+      <div className="flex justify-between bg-gray-50 z-20 text-sm px-4 py-2 sm:px-6">
         <PostVoteClient
+          initialVote={_currentVote?.type}
           postId={post.id}
-          initialVotesAmt={2}
-          initialVote={null}
+          initialVotesAmt={_votesAmt}
         />
-        <a
-          className="w-fit flex items-center gap-2"
+        <Link
           href={`/c/${communityName}/post/${post.id}`}
+          className="w-fit flex items-center gap-2"
         >
-          <MessageSquare className="h-4 w-4" /> {commentAmt}
-        </a>
+          <MessageSquare className="h-4 w-4" /> {commentAmt} comments
+        </Link>
       </div>
     </div>
   )
 }
-
 export default Post

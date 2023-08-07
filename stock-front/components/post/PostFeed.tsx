@@ -12,7 +12,7 @@ import Post from "./Post"
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[]
-  communityName?: string
+  communityName: string
 }
 
 const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
@@ -38,28 +38,10 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
           if (lastPage.length === 0) {
             return undefined
           }
-
           return pages.length + 1
-
-          // const lastRecord = lastPage
-
-          // if (lastPage.length === 0) {
-          //   return undefined // determine hasNextPage=false
-          // }
-
-          // // determine hasNextPage=false if the last page contains no post.
-          // if (
-          //   Array.isArray(pages) &&
-          //   pages.length > 0 &&
-          //   pages[pages.length - 1].length === 0
-          // ) {
-          //   return undefined
-          // }
-
-          // // hasNextpage=true
-          // return pages.length + 1
         },
         initialData: { pages: [initialPosts], pageParams: [1] },
+        staleTime: Infinity, // prevent re-fetching old data
       },
     )
 
@@ -78,7 +60,6 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
       {posts.map((post, index) => {
         const votesAmt = post.votes.reduce((acc, vote) => {
           if (vote.type === "UP") return acc + 1
-          if (vote.type === "DOWN") return acc - 1
           return acc
         }, 0)
 
@@ -94,6 +75,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
                 communityName={communityName ?? post.community.name}
                 commentAmt={post.comments.length}
                 post={post}
+                votesAmt={votesAmt}
+                currentVote={currentVote}
               />
             </li>
           )
@@ -104,6 +87,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
               commentAmt={post.comments.length}
               communityName={communityName ?? post.community.name}
               post={post}
+              votesAmt={votesAmt}
+              currentVote={currentVote}
             />
           </li>
         )

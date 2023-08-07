@@ -15,6 +15,22 @@ const s3 = new S3Client({
   },
 })
 
+function sanitizeFilename(filename: string) {
+  // Replace spaces with underscores
+  const sanitizedFilename = filename.replace(/\s+/g, "_")
+
+  // Remove special characters (except underscores and hyphens)
+  const cleanedFilename = sanitizedFilename.replace(/[^a-zA-Z0-9-_\.]/g, "")
+
+  // Limit filename length (example: 50 characters)
+  const limitedFilename = cleanedFilename.slice(0, 50)
+
+  // Normalize to lowercase
+  const normalizedFilename = limitedFilename.toLowerCase()
+
+  return normalizedFilename as string
+}
+
 export const getNewUrl = async (key: string) => {
   const imageUrl = await getSignedUrl(
     s3,
@@ -49,8 +65,14 @@ export async function POST(req: Request) {
   }
   const buffer = Buffer.from(await file.arrayBuffer())
 
+  // make unique filename without special characters
+  const uniqueIdentifier = `${Math.random()
+    .toString(36)
+    .substring(2)}-${Date.now()}`
+  const filename = `${uniqueIdentifier}-${file.name}`
+  const key: string = sanitizeFilename(filename)
+
   // Configure the upload details to send to S3
-  const key = `${Date.now().toString()}-${file.name}`
   const uploadParams = {
     Bucket: process.env.S3_BUCKET_NAME,
     Body: buffer,

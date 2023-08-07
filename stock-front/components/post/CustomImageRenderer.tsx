@@ -4,7 +4,7 @@ export async function CustomImageRenderer({ data }: any) {
   const src = data.file.url as string
 
   return (
-    <div className="relative w-full h-[15rem] overflow-hidden">
+    <div className="relative w-full min-h-[15rem] overflow-hidden">
       <Image
         alt="image in post"
         width="0"

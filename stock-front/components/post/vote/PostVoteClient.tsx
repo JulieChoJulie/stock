@@ -16,7 +16,7 @@ import { homepageUrl } from "@/lib"
 interface PostVoteClientProps {
   postId: string
   initialVotesAmt: number
-  initialVote: VoteType | null
+  initialVote: VoteType | undefined
 }
 
 const PostVoteClient: FC<PostVoteClientProps> = ({
@@ -26,7 +26,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
 }) => {
   const [votesAmt, setVotesAmt] = useState<number>(initialVotesAmt)
   const [currentVote, setCurrentVote] = useState(initialVote)
-  const [prevVote, setPrevVote] = useState<VoteType | null>(null)
+  const [prevVote, setPrevVote] = useState<VoteType | undefined>(undefined)
 
   const pathname = usePathname()
   // toast with login link including callbackUrl of pathname
@@ -49,7 +49,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       // only count 'UP' for vote amount
       if (currentVote === type) {
         // remove their vote
-        setCurrentVote(null)
+        setCurrentVote(undefined)
 
         if (type === "UP") setVotesAmt((prev) => prev - 1)
       } else {
@@ -73,7 +73,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       }
 
       setCurrentVote(prevVote)
-      setPrevVote(null)
+      setPrevVote(undefined)
 
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
@@ -105,7 +105,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
           })}
         />
         <p className="font-sm text-zinc-900">
-          {votesAmt === 0 ? null : votesAmt}
+          {votesAmt === 0 ? undefined : votesAmt}
         </p>
       </Button>
 
