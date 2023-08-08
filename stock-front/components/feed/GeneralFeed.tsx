@@ -1,20 +1,15 @@
-import { db } from "@/lib/db"
+import axios from "axios"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
+import { ExtendedPost } from "@/types/db"
+import { homepageUrl } from "@/lib"
 import PostFeed from "./PostFeed"
 
 const GeneralFeed = async () => {
-  const posts = await db.post.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      votes: true,
-      author: true,
-      comments: true,
-      community: true,
-    },
-    take: INFINITE_SCROLLING_PAGINATION_RESULTS,
-  })
+  const query: string = `${homepageUrl}/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=1&communityName`
+  const res = await axios.get(query)
+  const posts: ExtendedPost[] | null = res.data ?? null
+
+  if (!posts) return notFound()
 
   return <PostFeed initialPosts={posts} />
 }

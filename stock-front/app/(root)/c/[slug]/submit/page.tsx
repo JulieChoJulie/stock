@@ -1,7 +1,7 @@
-import Editor from "@/components/post/Editor"
-import { db } from "@/lib/db"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import Editor from "@/components/post/Editor"
+import { db } from "@/lib/db"
 
 interface pageProps {
   params: {

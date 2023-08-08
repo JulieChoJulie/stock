@@ -212,7 +212,7 @@ const Editor: FC<EditorProps> = ({ communityId }) => {
           className="w-full"
           form="community-post-form"
         >
-          Create Post
+          Submit Post
         </Button>
       </div>
       <div className="w-full p-4 bg-zinc-50 rounded-lg border border-zinc-200">

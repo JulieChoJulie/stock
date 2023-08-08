@@ -1,8 +1,8 @@
+import { NextResponse } from "next/server"
+import { z } from "zod"
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { PostValidator } from "@/lib/validators/post"
-import { NextResponse } from "next/server"
-import { z } from "zod"
 
 export async function POST(req: Request) {
   try {

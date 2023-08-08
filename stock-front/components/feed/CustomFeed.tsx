@@ -1,38 +1,19 @@
+import axios from "axios"
 import { getAuthSession } from "@/app/options"
-import { db } from "@/lib/db"
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config"
+import { ExtendedPost } from "@/types/db"
+import { homepageUrl } from "@/lib"
+import { PostsError } from "@/lib/exceptions/postsError"
 import PostFeed from "./PostFeed"
 
 const CustomFeed = async () => {
-  const session = await getAuthSession()
-  const userSubscriptions = await db.subscription.findMany({
-    where: {
-      userId: session?.user.id,
-    },
-    include: {
-      community: true,
-    },
-  })
+  // const session = await getAuthSession()
 
-  const posts = await db.post.findMany({
-    where: {
-      community: {
-        id: {
-          in: userSubscriptions.map(({ community }) => community.id),
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      votes: true,
-      author: true,
-      comments: true,
-      community: true,
-    },
-    take: INFINITE_SCROLLING_PAGINATION_RESULTS,
-  })
+  const query: string = `${homepageUrl}/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=1&communityName`
+  const res = await axios.get(query)
+  const posts: ExtendedPost[] | null = res.data ?? null
+
+  if (!posts) throw new PostsError()
 
   return <PostFeed initialPosts={posts} />
 }

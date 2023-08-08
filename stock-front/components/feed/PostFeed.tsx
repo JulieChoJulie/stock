@@ -41,13 +41,25 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
           }
           return pages.length + 1
         },
-        initialData: { pages: [initialPosts], pageParams: [1] },
+        initialData: {
+          pages: [initialPosts],
+          pageParams: [1],
+        },
         staleTime: Infinity, // prevent re-fetching old data
       },
     )
 
-  const posts: ExtendedPost[] =
-    data?.pages.flatMap((page) => page) ?? initialPosts
+  let posts: ExtendedPost[]
+  const result = data?.pages.flatMap((page) => page)
+
+  if (!result) {
+    posts = initialPosts
+  } else if (result[0] && result[0]?.id !== initialPosts[0].id) {
+    // if the lastest post is updated (new post is published)
+    posts = initialPosts
+  } else {
+    posts = result
+  }
 
   useEffect(() => {
     // load more posts when the last post comes into view

@@ -17,17 +17,17 @@ const layout = async ({
   const session = await getAuthSession()
   const community = await db.community.findFirst({
     where: { name: slug },
-    // include: {
-    //   posts: {
-    //     orderBy: {
-    //       createdAt: "desc",
-    //     },
-    //     include: {
-    //       author: true,
-    //       votes: true,
-    //     },
-    //   },
-    // },
+    include: {
+      posts: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: true,
+          votes: true,
+        },
+      },
+    },
   })
 
   const subscription = !session?.user
@@ -69,7 +69,9 @@ const layout = async ({
           {/* info sidebar */}
           <div className="overflow-hidden h-fit rounded-lg border border-gray-200 order-first md:order-last">
             <div className="px-6 py-4">
-              <p className="font-semibold py-3">About r/{slug}</p>
+              <a href={`/c/${slug}`}>
+                <p className="font-semibold py-3">About c/{slug}</p>
+              </a>
             </div>
             <dl className="divide-y divide-gray-100 px-6 py-4 text-sm leading-6 bg-slate-50">
               <div className="flex justify-between gap-x-4 py-3">
