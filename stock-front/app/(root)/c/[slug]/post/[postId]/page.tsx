@@ -1,8 +1,9 @@
 import { Post, Vote, User } from "@prisma/client"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
-import { Loader2, ThumbsDown, ThumbsUp } from "lucide-react"
+import { Loader2, MessageSquare, ThumbsDown, ThumbsUp } from "lucide-react"
 import axios from "axios"
+import { BsTruckFlatbed } from "react-icons/bs"
 import { redis } from "@/lib/redis"
 import { CachedPost } from "@/types/redis"
 import { db } from "@/lib/db"
@@ -13,6 +14,7 @@ import EditorOutput from "@/components/post/EditorOutput"
 import { PostwithComments } from "@/types/db"
 import { homepageUrl } from "@/lib"
 import { getPostsWithNewUrl } from "@/app/api/posts/route"
+import CommentSection from "@/components/post/CommentSection"
 
 interface PageProps {
   params: {
@@ -76,11 +78,9 @@ const page = async ({ params }: PageProps) => {
     return notFound()
   }
 
-  console.log("cachedPost***", cachedPost)
-
   // update signed image url from s3
-  const [postWithComments] = await getPostsWithNewUrl([postWithUrl])
-  postWithUrl = postWithComments
+  const [_postWithUrl] = await getPostsWithNewUrl([postWithUrl])
+  postWithUrl = _postWithUrl
 
   return (
     <div className="rounded-md bg-white shadow">
@@ -99,7 +99,7 @@ const page = async ({ params }: PageProps) => {
         </div>
       </div>
 
-      <div className="flex justify-between bg-gray-50 z-20 text-sm px-4 py-2 sm:px-6">
+      <div className="flex justify-between items-center bg-gray-50 z-20 text-sm px-4 py-2 sm:px-6">
         <Suspense
           fallback={
             <PostVoteShell
@@ -122,13 +122,21 @@ const page = async ({ params }: PageProps) => {
             }}
           />
         </Suspense>
-        {/* <Link
+      </div>
+
+      <Suspense
+        fallback={<Loader2 className="h-5 w-5 animate-spin text-zinc-500" />}
+      >
+        {/* ts expect error server component */}
+        <CommentSection postId={post?.id ?? ""} />
+      </Suspense>
+
+      {/* <Link
           href={`/c/${communityName}/post/${post.id}`}
           className="w-fit flex items-center gap-2"
         >
           <MessageSquare className="h-4 w-4" /> {commentAmt} comments
         </Link> */}
-      </div>
     </div>
   )
 }
