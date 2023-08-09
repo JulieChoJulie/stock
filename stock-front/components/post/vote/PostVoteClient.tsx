@@ -109,7 +109,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         </p>
       </Button>
 
-      {/* upvote */}
+      {/* downvote */}
       <Button
         isLoading={false}
         onClick={() => vote("DOWN")}

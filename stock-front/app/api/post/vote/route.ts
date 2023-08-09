@@ -1,10 +1,10 @@
+import { User } from "lucide-react"
+import { z } from "zod"
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { redis } from "@/lib/redis"
 import { PostVoteValidator } from "@/lib/validators/vote"
 import { CachedPost } from "@/types/redis"
-import { User } from "lucide-react"
-import { z } from "zod"
 
 // threshold for high engagement to cache the votes
 const CACHE_AFTER_UPVOTES = 1
@@ -79,7 +79,7 @@ export async function PATCH(req: Request) {
           content: JSON.stringify(post.content),
           id: post.id,
           title: post.title,
-          currentVote: voteType,
+          votesAmt,
           createdAt: post.createdAt,
         }
 

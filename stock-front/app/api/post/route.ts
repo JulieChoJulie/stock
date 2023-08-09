@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
@@ -44,6 +44,30 @@ export async function POST(req: Request) {
     return new Response(
       "Could not post to the community. Please try again later.",
       { status: 500 },
+    )
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const postId: string = req.nextUrl.searchParams.get("postId")
+    const post = await db.post.findFirst({
+      where: {
+        id: postId,
+      },
+      include: {
+        votes: true,
+      },
+    })
+
+    if (!post) return new Response(null, { status: 404 })
+    return new Response(JSON.stringify(post))
+  } catch (err) {
+    return new Response(
+      "Could not fetch the post at this time. Please try again later.",
+      {
+        status: 500,
+      },
     )
   }
 }

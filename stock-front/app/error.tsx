@@ -6,10 +6,9 @@ import { Button, buttonVariants } from "@/components/ui/button"
 
 const error = ({ error, reset }: { error: Error; reset: () => void }) => {
   return (
-    <div className="flex items-center w-full h-screen pb-[12rem]">
+    <div className="flex items-center justify-center w-full h-[calc(100vh-100px)] pb-[10rem]">
       <div className="flex flex-col text-center items-center space-y-5">
         <AlertTriangle size={48} color="#f25454" />
-
         <p
           className="text-base font-semibold text-emerald-600
         

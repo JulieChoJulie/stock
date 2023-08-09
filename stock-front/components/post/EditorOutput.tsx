@@ -2,7 +2,6 @@
 
 import { CSSProperties, FC } from "react"
 import dynamic from "next/dynamic"
-import { cn } from "@/lib/utils"
 import { CustomImageRenderer } from "./CustomImageRenderer"
 
 const Output = dynamic(
@@ -15,6 +14,8 @@ interface EditorOutputProps extends React.HTMLAttributes<HTMLDivElement> {
   styleProps?: CSSProperties
 }
 
+type OverflowWrapValue = "normal" | "break-word" | "anywhere"
+
 const renderers = {
   image: CustomImageRenderer,
 }
@@ -23,7 +24,7 @@ const style = {
   paragraph: {
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
-    overflowWrap: "break-word",
+    overflowWrap: "break-word" as OverflowWrapValue,
   },
 }
 
