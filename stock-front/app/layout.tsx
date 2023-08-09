@@ -1,12 +1,11 @@
-import Sidebar from "@/components/sidebar/Sidebar"
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import Sidebar from "@/components/sidebar/Sidebar"
+import "./globals.css"
 import Navbar from "@/components/Navbar"
 import { Toaster } from "@/components/ui/toaster"
 import Providers from "./Providers"
 
-// const font = Nunito({ subsets: ["latin"] })
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -34,7 +33,7 @@ export default function RootLayout({
             {/* ts expect error for ServerComponent */}
             <Navbar />
             {authModal}
-            <div className="container h-full max-w-7xl mx-auto pt-20 ml-0 md:ml-12">
+            <div className="container h-full max-w-7xl mx-auto pt-20 md:pl-22">
               {children}
             </div>
           </div>
