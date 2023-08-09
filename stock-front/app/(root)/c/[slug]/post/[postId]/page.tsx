@@ -14,7 +14,7 @@ import EditorOutput from "@/components/post/EditorOutput"
 import { PostwithComments } from "@/types/db"
 import { homepageUrl } from "@/lib"
 import { getPostsWithNewUrl } from "@/app/api/posts/route"
-import CommentSection from "@/components/post/CommentSection"
+import CommentSection from "@/components/post/comment/CommentSection"
 
 interface PageProps {
   params: {

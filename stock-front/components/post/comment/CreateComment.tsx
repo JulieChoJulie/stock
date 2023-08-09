@@ -9,14 +9,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { commentRequest } from "@/lib/validators/comment"
 import { useCustomToast } from "@/hooks/use-custom-toast"
 import { toast } from "@/hooks/use-toast"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 
 interface CreateCommentProps {
   postId: string
-  replyToId: string | null
+  replyToId: string | undefined
+  setIsReplying: (arg: boolean) => void | undefined
 }
 
-const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
+const CreateComment: FC<CreateCommentProps> = ({
+  postId,
+  replyToId,
+  setIsReplying,
+}) => {
   const [input, setInput] = useState<string>("")
   const { loginToast } = useCustomToast()
   const router = useRouter()
@@ -37,6 +42,9 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
       // client component and browser state stay the same.
       router.refresh()
       setInput("")
+      if (replyToId) {
+        setIsReplying(false)
+      }
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -78,7 +86,17 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
           rows={1}
           placeholder="Add a comment..."
         />
-        <div className="mt-2 flex justify-end">
+        <div className="mt-2 flex justify-end gap-2">
+          {replyToId ? (
+            <Button
+              tabIndex={-1}
+              isLoading={false}
+              variant="subtle"
+              onClick={() => setIsReplying(false)}
+            >
+              Cancel
+            </Button>
+          ) : null}
           <Button
             onClick={() =>
               postComment({
