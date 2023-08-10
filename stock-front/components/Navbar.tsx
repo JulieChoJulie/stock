@@ -4,6 +4,7 @@ import { Icons } from "./Icons"
 
 import UserAccountNav from "./UserAccountNav"
 import SignInButton from "./SignInButton"
+import Searchbar from "./Searchbar"
 
 const Navbar = async () => {
   const session = await getAuthSession()
@@ -24,7 +25,7 @@ const Navbar = async () => {
         </Link>
 
         {/* Search bar */}
-        <div className="relative">Search bar</div>
+        <Searchbar />
 
         {session?.user ? (
           <UserAccountNav user={session.user} />
