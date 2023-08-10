@@ -12,7 +12,6 @@ import { handleMuataionError } from "@/lib/exceptions/mutationError"
 import { useCustomToast } from "@/hooks/use-custom-toast"
 import { toast } from "@/hooks/use-toast"
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
@@ -86,13 +85,13 @@ const UsernameForm: FC<UsernameFormProps> = ({ user }) => {
         updateUsername(e)
       })}
     >
-      <Card className="p-4">
-        <CardHeader>
-          <CardTitle className="mb-2">Your username</CardTitle>
-          <CardDescription>Please enter a display username.</CardDescription>
-        </CardHeader>
+      <CardHeader>
+        <CardTitle className="mb-2">Your username</CardTitle>
+        <CardDescription>Please enter a display username.</CardDescription>
+      </CardHeader>
 
-        <CardContent>
+      <CardContent className="flex flex-row justify-between">
+        <div className="flex flex-col">
           <div className="relative grid gap-y-1">
             <div className="absolute bottom-[-5px] left-0 w-8 h-10 grid place-items-center">
               <span className="text-sm text-zinc-400">@</span>
@@ -117,12 +116,17 @@ const UsernameForm: FC<UsernameFormProps> = ({ user }) => {
               {errors.username.message}
             </p>
           )}
-        </CardContent>
+        </div>
+        <Button size="sm" isLoading={isLoading}>
+          Save Change
+        </Button>
+      </CardContent>
 
-        <CardFooter className="justify-end">
-          <Button isLoading={isLoading}>Save Change</Button>
-        </CardFooter>
-      </Card>
+      {/* <CardFooter className="justify-end">
+        <Button size="sm" isLoading={isLoading} className="text-sm">
+          Save Change
+        </Button>
+      </CardFooter> */}
     </form>
   )
 }
