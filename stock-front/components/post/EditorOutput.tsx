@@ -3,6 +3,7 @@
 import { CSSProperties, FC } from "react"
 import dynamic from "next/dynamic"
 import { CustomImageRenderer } from "./CustomImageRenderer"
+import { HashtagRenderer } from "./HashtagRenderer"
 
 const Output = dynamic(
   async () => (await import("editorjs-react-renderer")).default,
@@ -18,6 +19,7 @@ type OverflowWrapValue = "normal" | "break-word" | "anywhere"
 
 const renderers = {
   image: CustomImageRenderer,
+  paragraph: HashtagRenderer,
 }
 
 const style = {
