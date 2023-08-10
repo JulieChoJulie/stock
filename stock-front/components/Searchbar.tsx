@@ -1,11 +1,11 @@
 "use client"
 
-import { useCallback, useState, useRef } from "react"
+import { useCallback, useState, useRef, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import debounce from "lodash.debounce"
 import { Prisma, Community } from "@prisma/client"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Users } from "lucide-react"
 
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
@@ -21,10 +21,16 @@ import {
 const Searchbar = () => {
   const [input, setInput] = useState<string>("")
   const searchRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
 
   useOnClickOutside(searchRef, () => {
     setInput("")
   })
+
+  // whenever pathname changes, close the search list
+  useEffect(() => {
+    setInput("")
+  }, [pathname])
 
   const router = useRouter()
   const {

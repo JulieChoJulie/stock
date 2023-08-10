@@ -38,11 +38,6 @@ const CommentVotes: FC<CommentVotesProps> = ({
   // toast with login link including callbackUrl of pathname
   const { loginToast } = useCustomToast(`${homepageUrl}${pathname}`)
 
-  // sync with server comp
-  //   useEffect(() => {
-  //     setCurrentVote(initialVote)
-  //   }, [initialVote])
-
   const { mutate: vote } = useMutation({
     mutationFn: async (type: VoteType) => {
       const payload: CommentVoteRequest = {
