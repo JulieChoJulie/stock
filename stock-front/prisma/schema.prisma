@@ -81,6 +81,21 @@ model Subscription {
   @@id([userId, communityId])
 }
 
+model Hashtag {
+  id    String            @id @default(cuid())
+  name  String
+  posts HashtagsOnPosts[]
+}
+
+model HashtagsOnPosts {
+  hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
+  hashtagId String
+  post      Post    @relation(fields: [postId], references: [id])
+  postId    String
+
+  @@id([postId, hashtagId])
+}
+
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -97,6 +112,7 @@ model Post {
   comments Comment[]
   votes    Vote[]
   images   Image[]
+  hashtags HashtagsOnPosts[]
 }
 
 model Image {

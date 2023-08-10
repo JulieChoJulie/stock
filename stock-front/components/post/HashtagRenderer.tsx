@@ -6,16 +6,15 @@ export async function HashtagRenderer({ data }: any) {
 
   return (
     <p>
-      {segments.map((val: string) => {
+      {segments.map((val: string, index: number) => {
         if (val.match(/(#[^\s#]+)/)) {
           return (
-            <Link
-              className="text-green-600 font-semibold"
-              key={`${val}_${Math.random()}`}
-              href={`/hashtag/${val.slice(1)}`}
+            <span
+              key={`${val}-${Math.random()}`}
+              className="text-green-600 font-semibold hover:underline-offset-2"
             >
-              {val}
-            </Link>
+              <Link href={`/hashtag/${val.slice(1)}`}>{val}</Link>
+            </span>
           )
         }
         return val

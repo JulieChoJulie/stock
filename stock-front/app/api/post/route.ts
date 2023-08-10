@@ -1,8 +1,57 @@
+import { promises } from "dns"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { getAuthSession } from "@/app/options"
 import { db } from "@/lib/db"
 import { PostValidator } from "@/lib/validators/post"
+
+async function createConnectionWithPost(hashtag: string, postId: string) {
+  const existingHashtag = await db.hashtag.findUnique({
+    where: {
+      name: hashtag,
+    },
+  })
+
+  if (existingHashtag) {
+    // Hashtag already exists, connect it to the post
+    await db.hashtag.update({
+      where: {
+        name: hashtag,
+      },
+      data: {
+        posts: {
+          create: [
+            {
+              post: {
+                connect: {
+                  id: postId,
+                },
+              },
+            },
+          ],
+        },
+      },
+    })
+  } else {
+    // Hashtag doesn't exist, create it and connect to the post
+    await db.hashtag.create({
+      data: {
+        name: hashtag,
+        posts: {
+          create: [
+            {
+              post: {
+                connect: {
+                  id: postId,
+                },
+              },
+            },
+          ],
+        },
+      },
+    })
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -27,13 +76,29 @@ export async function POST(req: Request) {
       })
     }
 
-    await db.post.create({
+    const post = await db.post.create({
       data: {
         title,
         content,
         authorId: session.user.id,
         communityId,
       },
+    })
+
+    // find hashtags and connect with published post
+    content.blocks.forEach(async (obj) => {
+      if (obj.type === "paragraph") {
+        // find hashtags in paragraph
+        const hashtags: string[] = obj.data.text.match(/(#[^\s#]+)/)
+
+        await Promise.all(
+          hashtags.map(async (_tag) => {
+            // remove # eg. "#hashtag" -> "hashtag"
+            const tag = _tag.slice(1)
+            createConnectionWithPost(tag, post.id)
+          }),
+        )
+      }
     })
 
     return NextResponse.json({ status: 200 })
@@ -50,10 +115,10 @@ export async function POST(req: Request) {
 
 export async function GET(req: NextRequest) {
   try {
-    const postId: string = req.nextUrl.searchParams.get("postId")
+    const postId = req.nextUrl.searchParams.get("postId")
     const post = await db.post.findFirst({
       where: {
-        id: postId,
+        id: postId ?? "",
       },
       include: {
         votes: true,
