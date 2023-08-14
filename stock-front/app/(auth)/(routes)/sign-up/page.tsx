@@ -1,13 +1,13 @@
-import { getServerSession } from "next-auth/next";
-import { options } from "@/app/options";
+import GoBackButton from "@/components/GoBackButton"
+import SignupCard from "@/components/auth/SignupCard"
 
-import SignupCard from "@/components/Auth/SignupCard";
-
-// export default async function Home() {
-//   const session = await getServerSession(options);
-//   return <>{session ? <div>{session.user?.name}</div> : <SignupCard />}</>;
-// }
-
-export default async function Home() {
-  return <SignupCard />;
+export default function Home() {
+  return (
+    <>
+      <div className="w-full ml-8">
+        <GoBackButton />
+      </div>
+      <SignupCard />
+    </>
+  )
 }

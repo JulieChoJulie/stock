@@ -1,5 +1,5 @@
-import AuthCard from "./AuthCard";
-import SignupForm from "./SignupForm";
+import AuthCard from "@/components/auth/AuthCard"
+import SignupForm from "@/components/auth/SignupForm"
 
 const SignupCard = () => {
   return (
@@ -8,7 +8,7 @@ const SignupCard = () => {
       head="Sign up with email"
       form={<SignupForm />}
     />
-  );
-};
+  )
+}
 
-export default SignupCard;
+export default SignupCard

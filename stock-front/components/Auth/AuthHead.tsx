@@ -1,24 +1,22 @@
-import Image from "next/image";
-import React from "react";
-import { logo } from "@/lib";
+import React from "react"
 
 type AuthHeadType = {
-  heading: string;
-};
+  heading: string
+}
 
 const AuthHead = ({ heading }: AuthHeadType) => {
   return (
-    <div className="mb-1">
+    <div className="mb-4">
       <div className="flex justify-center">
-        <div className="w-40 h-5 relative logo">
+        {/* <div className="w-40 h-5 relative logo">
           <Image src={logo} alt="logo" layout="fill" objectFit="cover" />
-        </div>
+        </div> */}
       </div>
-      <h2 className="mt-4 text-center text-base font-extrabold text-gray-900">
+      <h2 className="mt-4 text-center font-extrabold text-gray-900">
         {heading}
       </h2>
     </div>
-  );
-};
+  )
+}
 
-export default AuthHead;
+export default AuthHead

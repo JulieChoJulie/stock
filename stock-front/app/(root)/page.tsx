@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button";
-
 const Home = () => {
-  return <div>Main Content</div>;
-};
+  return <div className="ml-[3rem] md:ml-[14rem]">Home page</div>
+}
 
-export default Home;
+export default Home

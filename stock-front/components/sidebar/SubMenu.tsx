@@ -1,31 +1,37 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { SubMenuProps } from "@/lib/types";
-import { BsChevronDown } from "react-icons/bs";
-import SubMenuItem from "./SubMenuItem";
+import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { SubMenuProps } from "@/types/types"
+import { BsChevronDown } from "react-icons/bs"
+import SubMenuItem from "./SubMenuItem"
 
 const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
-  const pathname = usePathname();
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+  const pathname = usePathname()
+  const router = useRouter()
 
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
+  const isHome: boolean = menu.title === "home"
+  const onClickSubMenu = () => {
+    if (!isOpen && menu.submenu && menu.submenuItems) {
+      router.push(`/${menu.title}/${menu?.submenuItems[0].title}`)
+    } else {
+      setIsSubmenuOpen(!isSubmenuOpen)
+    }
+  }
   return (
     <div className="submenu">
       <li
         key={`${menu.title}`}
         className={`text-slate-700 text-lg flex items-center gap-x-4 
                   cursor-pointer p-2 hover:bg-slate-100 mb-1 ${
-                    pathname.includes(menu.title) && "active"
+                    !isHome && pathname.includes(menu.title) && "active"
                   }
+                  ${isHome && pathname === "/" && "active"}
                  
                   `}
       >
-        <div
-          className="w-full"
-          role="presentation"
-          onClick={() => setIsSubmenuOpen(!isSubmenuOpen)}
-        >
+        <div className="w-full" role="presentation" onClick={onClickSubMenu}>
           <span className="text-2xl block float-left mr-2">{menu.icon}</span>
 
           <span
@@ -47,8 +53,8 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
       {isSubmenuOpen && menu.submenuItems && isOpen && (
         <ul>
           {menu?.submenuItems?.map((submenu) => {
-            const href: string = `/${menu.title}/${submenu.title}`;
-            const isActive: boolean = pathname.includes(href);
+            const href: string = `/${menu.title}/${submenu.title}`
+            const isActive: boolean = pathname.includes(href)
             return (
               <div key={`${menu.title}_${submenu.title}`}>
                 <SubMenuItem
@@ -57,12 +63,12 @@ const SubMenu: React.FC<SubMenuProps> = ({ menu, isOpen }) => {
                   isActive={isActive}
                 />
               </div>
-            );
+            )
           })}
         </ul>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SubMenu;
+export default SubMenu

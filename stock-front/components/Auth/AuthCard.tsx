@@ -1,24 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React, { FC } from "react";
-import Link from "next/link";
-import AuthHead from "./AuthHead";
-import LoginGoogle from "./LoginGoogle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import React, { FC } from "react"
+import Link from "next/link"
+import AuthHead from "@/components/auth/AuthHead"
+import LoginGoogle from "@/components/auth/LoginGoogle"
 
 type Props = {
-  form: React.ReactNode;
-  head: string;
-  loginform: boolean;
-};
+  form: React.ReactNode
+  head: string
+  loginform: boolean
+}
 
 const AuthCard: FC<Props> = ({ form, head, loginform }) => {
   return (
-    <Card className="w-full">
+    <Card
+      className="flex flex-col w-full max-w-[500px] items-center 
+    justify-center border-none shadow-none"
+    >
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="text-xl">
           <AuthHead heading={head} />
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="max-w-[300px] w-full">
         {form}
         <div className="mt-2 grid grid-cols-3 items-center text-gray-400">
           <hr className="border-gray-400" />
@@ -47,7 +50,7 @@ const AuthCard: FC<Props> = ({ form, head, loginform }) => {
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AuthCard;
+export default AuthCard

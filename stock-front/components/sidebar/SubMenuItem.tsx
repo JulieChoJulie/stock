@@ -1,5 +1,5 @@
-import { SubMenuItemProps } from "@/lib/types";
-import Link from "next/link";
+import { SubMenuItemProps } from "@/types/types"
+import Link from "next/link"
 
 const SubMenuItem: React.FC<SubMenuItemProps> = ({
   submenu,
@@ -17,7 +17,7 @@ const SubMenuItem: React.FC<SubMenuItemProps> = ({
         {submenu.title}
       </Link>
     </li>
-  );
-};
+  )
+}
 
-export default SubMenuItem;
+export default SubMenuItem

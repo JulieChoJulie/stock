@@ -1,5 +1,5 @@
 const page = () => {
-  return <div>screener</div>;
+  return <div className="h-[1800px]">screener</div>;
 };
 
 export default page;
